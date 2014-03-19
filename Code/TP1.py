@@ -1,3 +1,7 @@
+#Aina NARY ANDRIAMBELO
+#Samuel CONSTANTINO
+#Interface Homme-Machine : TP1
+
 import serial
 import time
 import math
@@ -78,11 +82,13 @@ def getData(S):
     AllDataSplit = AllData.splitlines()
     for l in AllDataSplit:
         if l[0:2] == 'g,': #GS Data
+            
             DataG = l.split(',')
-            DataGname = DataG[0]
-            DataGTime = DataG[1]
-            DataGS = DataG[2]
-            GS.append([DataGTime,DataGS])
+            if len(DataG) == 3:
+                DataGname = DataG[0]
+                DataGTime = DataG[1]
+                DataGS = DataG[2]
+                GS.append([DataGTime,DataGS])
             
         elif l[0:2] == 'a,': #Accelerometer Data
             DataA = l.split(',')
@@ -130,22 +136,6 @@ print("start program")
 length = ser.inWaiting()
 startGS(ser,speed_ms)
 
-#test de lecture de x Message
-x = 0
-maxMSG = 10
-while x < maxMSG:
-    #print("----------------\n")
-    DataReader = getData(ser)
-    DataGS = DataReader[0]
-    DataACC = DataReader[1]
-    for g in DataGS:
-        AllDataGS.append(g)
-    for a in DataACC:
-        AllDataACC.append(a)
-    x += 1
-    #print DataGS
-    #print AllDataGS
-    time.sleep(sleep)
 
 #test : voir les donnee recuperer
 # print "\nDonne GS : \n"
@@ -161,7 +151,7 @@ while x < maxMSG:
 ##############
 
 limit = 1000
-maxMSG = 50
+maxMSG = 200
 
 xminG = 0
 xmaxG = 200
