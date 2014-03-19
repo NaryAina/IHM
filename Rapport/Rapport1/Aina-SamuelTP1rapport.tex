@@ -57,7 +57,7 @@
 	\bigskip
 	\large Techniques d'interaction homme-machine}
 \author{Aina Rasolonjatovo Alain Nary Andriambelo \\ Samuel Constantino}
-\date{12 mars 2014}
+\date{21 mars 2014}
 
 \parindent=0cm
 \parskip=6pt
@@ -75,14 +75,28 @@ Our project will be a game where the player has to decrease her/his stress level
 
 Our tasks will be : for the Blender part, draw a scene with a cube in the middle (and a background, etc), applying speed for the rotation of the cube, and modifying this speed in real time ; for the sensor part, acquire the GSR data, interpret it and translate it as speed, and finally send it to our Blender game. 
 
-In this project, we will mainly work with the GSR data, however, we might also use the accelerometer data for example as another rotation axis, or to task the player with specific movements, or event to modify the scene directly (move the camera...).
+In this project, we will mainly work with the GSR data, however, we might also use the accelerometer data for example as another rotation axis, or to task the player with specific movements, or even to modify the scene directly (move the camera...).
 
 \subsection{Block diagram}
 
-
+\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{graph/blockDiagram.png}
 
 \subsection{Use cases}
 
+\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{graph/useCase.png}
+
+When the player launches the game, s/he is prompted with the main menu where s/he can click on two buttons. The first one lets the player decide in which mode to play the game. The second one launches the game. The modes include at least the two following : a 'Relaxation mode' and a 'Challenge mode'. 
+
+In 'Relaxation mode', the player has no real task and can just try to relax as the cube displays her/his stress level in a soothing manner. In 'Challenge mode', the player is tasked with goals (for example, trying to slow the cube to a certain speed, or trying to not variate much from her/his current speed, play in the dark...) for a definite amount of time and wins more time (and score) when a goal is met. The longer s/he plays, the more goals s/he has to complete and the harder these goals are.
+
+In-game, a HUD (head-up display) presents the player with her/his current play-time, current score, on-going goals (in 'Challenge mode'), and the current speed of the rotation. The players only possible action is trying to relax (and complete the goals if any). 
+
+\begin{center}
+\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{graph/mockup1.jpg}
+\textit{Game screen mockup design}
+\end{center}
+
+\clearpage
 \section{Interface for accelerometer and electrodermal activity 
  data acquisition}
 
