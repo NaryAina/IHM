@@ -1,0 +1,89 @@
+\documentclass[12pt,a4paper]{article} 
+\usepackage[T1]{fontenc}
+\usepackage[francais]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb} %pour des symboles mathematique
+\usepackage{graphicx} 
+\usepackage{epstopdf} %pour utiliser les .eps
+\usepackage{url}
+\usepackage{fancyhdr}
+\usepackage{fullpage}
+\usepackage{array}
+\usepackage[table]{xcolor} %pour les couleurs
+\usepackage{multicol}
+\usepackage[babel=true]{csquotes} %pour les citations
+
+\usepackage{adjustbox} %pour resizer les tableaux
+
+%%%% pour l'insertion de code %%%%%
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0,0,0}
+\definecolor{mauve}{rgb}{0,0,0}
+
+\lstset{emph={%  
+    float, %
+    },emphstyle={\color{gray}\bfseries}%
+}%
+
+\lstset{frame=tb,
+  language=Matlab,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{black},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{black},
+  identifierstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true
+  tabsize=3
+}
+
+%%%%%%%%%%%%%%%%%%%%%%
+
+%\pagestyle{myheadings}
+%\markright{Tableau blanc interactif}
+
+\title{\LARGE \textbf{TP 1 - Project Abstract and Sensor GUI}\\
+	\bigskip
+	\bigskip
+	\large Techniques d'interaction homme-machine}
+\author{Aina Rasolonjatovo Alain Nary Andriambelo \\ Samuel Constantino}
+\date{12 mars 2014}
+
+\parindent=0cm
+\parskip=6pt
+
+\begin{document}
+	\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Project}
+
+\subsection{Abstract}
+
+Our project will be a game where the player has to decrease her/his stress level to win. A cube (or other object) is placed at the center of the screen and rotates at a speed depending on the player's stress. The more stressed s/he is, the faster the cube spins. More game-like features could also be implemented (for example : different game modes (more challenge-focused) ; a scoring system ; things to disturb the player like terrifying sounds, false acceleration, modification of the scene, etc.) depending on the time we have left.
+
+Our tasks will be : for the Blender part, draw a scene with a cube in the middle (and a background, etc), applying speed for the rotation of the cube, and modifying this speed in real time ; for the sensor part, acquire the GSR data, interpret it and translate it as speed, and finally send it to our Blender game. 
+
+In this project, we will mainly work with the GSR data, however, we might also use the accelerometer data for example as another rotation axis, or to task the player with specific movements, or event to modify the scene directly (move the camera...).
+
+\subsection{Block diagram}
+
+
+
+\subsection{Use cases}
+
+\section{Interface for accelerometer and electrodermal activity 
+ data acquisition}
+
+\end{document}
