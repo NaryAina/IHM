@@ -12,9 +12,17 @@ from matplotlib.widgets import Button
 
 global AllDataGS
 global AllDataACC   
-global GS_X
 Continu = False
 Select_GSR = True
+
+AllDataACC = []   
+AllDataGS = []
+ser = serial.Serial()
+ser.port = 2
+ser.timeout = 1
+Select_GSR = True  
+speed_ms = 50 #frequence de mesure en ms
+sleep = 0.05 #frequence de mesure en s
 
 class Index:
     ind = 0    
@@ -29,12 +37,13 @@ class Index:
         
     def Select(self, event):
         global Select_GSR    
+
         Select_GSR = not(Select_GSR)
         
     def Save(self, event):
-        save("figSav", ext="png", close=False, verbose=True)
+        SavePNG("figSav", ext="png", close=False, verbose=True)
         
-def save(path, ext='png', close=True, verbose=True):
+def SavePNG(path, ext='png', close=True, verbose=True):
     # Extract the directory and filename from the given path
     directory = os.path.split(path)[0]
     filename = "%s.%s" % (os.path.split(path)[1], ext)
@@ -46,14 +55,12 @@ def save(path, ext='png', close=True, verbose=True):
         os.makedirs(directory)
      
     # The final path to save to
-    savepath = os.path.join(directory, filename)
-     
+    savepath = os.path.join(directory, filename)    
     if verbose:
         print("Saving figure to '%s'..." % savepath),
      
-    # Actually save the figure
+    # Save the figure
     plt.savefig(savepath)
-    # Close it
     if close:
         plt.close()
      
@@ -70,18 +77,19 @@ def reader(S):
 #return the data from sensor S (GS,ACC,Others)
 #The data are in string format (of real number)
 def getData(S):
-    #####
+    
     #From first data exchange of the sensor :
     #Format pour le GSR: g,timestamp [ms],gsr-value [??]
-    #Format pour l'accelerometre: a,timestamp [ms],axe-x [g],axe-y [g],axe-z [g]
-    #####
-    GS = [] #timeSt
+    #Format pour l'accelerometre: a,timestamp [ms],axe-x [g],axe-y [g],axe-z [g]   
+    GS = [] 
     ACC = []
     Others = []
-    AllData = reader(S) #string avec toute les donnees
+    AllData = reader(S) #string with all data
+    
+    #sort the data into the 3 list GS,ACC and Others
     AllDataSplit = AllData.splitlines()
     for l in AllDataSplit:
-        if l[0:2] == 'g,': #GS Data
+        if l[0:2] == 'g,': #GSR Data
             
             DataG = l.split(',')
             if len(DataG) == 3:
@@ -105,25 +113,17 @@ def getData(S):
     return [GS,ACC,Others]
 
 
-#Arreter le device s
+#Send stop command
 def stopGS(S):
     S.write('gstop\n')
     
-#Demarrer le device s, mesurer tout les ms milliseconde
+#Start the device, with ms period aquisition 
 def startGS(S,ms):
     msg = 'gstartf ' + str(ms) + '\n'
     S.write(msg)
 
 
-AllDataACC = []   
-AllDataGS = []
-ser = serial.Serial()
-ser.port = 2
-ser.timeout = 1
-Select_GSR = True  
-speed_ms = 50 #frequence de mesure en ms
-sleep = 0.05 #frequence de mesure en s
-#ser.open()
+
 
 
 ################
@@ -136,22 +136,12 @@ print("start program")
 length = ser.inWaiting()
 startGS(ser,speed_ms)
 
-
-#test : voir les donnee recuperer
-# print "\nDonne GS : \n"
-# for g in AllDataGS:
-    # print g
-
-# print "\nDonne ACC : \n"
-# for a in AllDataACC:
-    # print a
-
 ##############
 # Plot Draw  #
 ##############
 
 limit = 1000
-maxMSG = 200
+maxMSG = 50
 
 xminG = 0
 xmaxG = 200
@@ -163,6 +153,7 @@ xmaxA = 200
 yminA = -5
 ymaxA = 5
 
+Starting = True
 fig= plt.figure()
 
 i = 0
@@ -178,7 +169,6 @@ yA3 = list()
 
 plt.ion()
 plt.show()
-#plt.axis([xminG,xmaxG,yminG,ymaxG])
 
 #Draw buttons
 callback = Index()
@@ -209,13 +199,14 @@ while i < maxMSG: #a changer : tant que pas stop
             for g in range (len(DataGS)):
                 xG += [float(DataGS[g][0])]           
                 yG += [float(DataGS[g][1])]
-            plt.plot(xG,yG,'r', axes=axplot)
+            plt.plot(xG,yG,'m', axes=axplot,label='GSR')
             indice = xG[len(xG)-1]
             if indice > limit:
                 plt.axis([indice-limit,limit+indice,yminG,ymaxG])
             else:
                 plt.axis([xminG,xmaxG,yminG,ymaxG])
             plt.ion()
+            
             plt.show()
             plt.draw()
             axplot.set_xlabel('temps (ms)')
@@ -226,15 +217,21 @@ while i < maxMSG: #a changer : tant que pas stop
                 yA2 += [float(DataACC[a][2])]
                 yA3 += [float(DataACC[a][3])]
                 xA += [float(DataACC[a][0])]    
-            plt.plot(xA,yA1,'r',xA,yA2,'g', xA,yA3,'b', axes=axplot)
+           
+            plt.plot(xA,yA1,'r',axes=axplot,label='x ACC')
+            plt.plot(xA,yA2,'g',axes=axplot,label='y ACC')
+            plt.plot(xA,yA3,'b', axes=axplot,label='z ACC')
+
             indice = xA[len(xA)-1]
             if indice > limit:
                 plt.axis([indice-limit,limit+indice,yminA,ymaxA])
             else:
                 plt.axis([xminA,xmaxA,yminA,ymaxA])
+ 
             plt.ion()
             plt.show()
             plt.draw()
+            
             axplot.set_xlabel('temps (ms)')
             axplot.set_ylabel('Accelerometer values')
 
