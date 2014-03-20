@@ -87,7 +87,7 @@ In this project, we will mainly work with the GSR data, however, we might also u
 
 When the player launches the game, s/he is prompted with the main menu where s/he can click on two buttons. The first one lets the player decide in which mode to play the game. The second one launches the game. The modes include at least the two following : a 'Relaxation mode' and a 'Challenge mode'. 
 
-In 'Relaxation mode', the player has no real task and can just try to relax as the cube displays her/his stress level in a soothing manner. In 'Challenge mode', the player is tasked with goals (for example, trying to slow the cube to a certain speed, or trying to not variate much from her/his current speed, play in the dark...) for a definite amount of time and wins more time (and score) when a goal is met. The longer s/he plays, the more goals s/he has to complete and the harder these goals are.
+In 'Relaxation mode', the player has no real task and can just try to relax as the cube displays her/his stress level in a soothing manner. In 'Challenge mode', the player is tasked with goals (for example, trying to slow the cube to a certain speed, or trying not to variate much from her/his current speed, play in the dark...) for a definite amount of time and wins more time (and score) when a goal is met. The longer s/he plays, the more goals s/he has to complete and the harder these goals are.
 
 In-game, a HUD (head-up display) presents the player with her/his current play-time, current score, on-going goals (in 'Challenge mode'), and the current speed of the rotation. The players only possible action is trying to relax (and complete the goals if any). 
 
@@ -99,5 +99,23 @@ In-game, a HUD (head-up display) presents the player with her/his current play-t
 \clearpage
 \section{Interface for accelerometer and electrodermal activity 
  data acquisition}
+
+For this TP, we created a simple interface in Python to visualize the data from the sensor in real-time. The code uses the \texttt{matplotlib} library to make the graphs (http://matplotlib.org/) and the \texttt{pyserial} library to communicate with the sensor (http://pyserial.sourceforge.net/). Both libraries are necessary to run the code. 
+
+\begin{center}
+%\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{graph/figSav01.png}
+\includegraphics[scale=0.3]{figSav_ACC.png}
+\includegraphics[scale=0.3]{figSav_GSR.png}
+
+\textit{Example our GUI when capturing accelerometer data and GSR data}
+\end{center}
+
+The controls for the GUI are the following :
+\begin{itemize}
+  \item Start : starts capturing the data in real-time
+  \item Stop : stops capturing the data
+  \item Select : switches between capturing the GSR and accelerometer data
+	\item Save : save a .png image of the graph
+\end{itemize}
 
 \end{document}
