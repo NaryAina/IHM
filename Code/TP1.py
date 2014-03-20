@@ -28,8 +28,7 @@ class Index:
     ind = 0    
     def Start(self, event):
         global Continu
-        Continu = True
-        
+        Continu = True     
 
     def Stop(self, event):
         global Continu
@@ -123,9 +122,6 @@ def startGS(S,ms):
     S.write(msg)
 
 
-
-
-
 ################
 #Initialization#
 ################
@@ -140,16 +136,18 @@ startGS(ser,speed_ms)
 # Plot Draw  #
 ##############
 
-limit = 1000
-maxMSG = 50
+maxMSG = 100
+limitG = 15000
+limitA = 15000
+
 
 xminG = 0
-xmaxG = 200
-yminG = -1
-ymaxG = 20
+xmaxG = 20000
+yminG = -0.5
+ymaxG = 15
 
 xminA = 0
-xmaxA = 200
+xmaxA = 20000
 yminA = -5
 ymaxA = 5
 
@@ -187,7 +185,11 @@ bselect = Button(axselect, 'Select')
 bselect.on_clicked(callback.Select)
 bsave = Button(axsave, 'Save')
 bsave.on_clicked(callback.Save)
-
+plt.plot([],[],'m', axes=axplot,label='GSR')
+plt.plot([],[],'r',axes=axplot,label='x ACC')
+plt.plot([],[],'g',axes=axplot,label='y ACC')
+plt.plot([],[],'b', axes=axplot,label='z ACC')
+legend = axplot.legend(loc='upper right', shadow=True)
 while i < maxMSG: #a changer : tant que pas stop
     if Continu:
         #Get the data
@@ -201,15 +203,15 @@ while i < maxMSG: #a changer : tant que pas stop
                 yG += [float(DataGS[g][1])]
             plt.plot(xG,yG,'m', axes=axplot,label='GSR')
             indice = xG[len(xG)-1]
-            if indice > limit:
-                plt.axis([indice-limit,limit+indice,yminG,ymaxG])
+            if indice > limitG:
+                plt.axis([indice-limitG,limitG+indice/2,yminG,ymaxG])
             else:
                 plt.axis([xminG,xmaxG,yminG,ymaxG])
             plt.ion()
             
             plt.show()
             plt.draw()
-            axplot.set_xlabel('temps (ms)')
+            axplot.set_xlabel('time (ms)')
             axplot.set_ylabel('GSR value')
         else:
             for a in range(len(DataACC)):
@@ -221,10 +223,10 @@ while i < maxMSG: #a changer : tant que pas stop
             plt.plot(xA,yA1,'r',axes=axplot,label='x ACC')
             plt.plot(xA,yA2,'g',axes=axplot,label='y ACC')
             plt.plot(xA,yA3,'b', axes=axplot,label='z ACC')
-
+            
             indice = xA[len(xA)-1]
-            if indice > limit:
-                plt.axis([indice-limit,limit+indice,yminA,ymaxA])
+            if indice > limitA:
+                plt.axis([indice-limitA,limitA+indice/2,yminA,ymaxA])
             else:
                 plt.axis([xminA,xmaxA,yminA,ymaxA])
  
