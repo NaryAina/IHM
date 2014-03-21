@@ -1,6 +1,6 @@
 #Aina NARY ANDRIAMBELO
 #Samuel CONSTANTINO
-#Interface Homme-Machine : TP1
+#Interface Homme-Machine : TP1 v2 (with data saving in a file this time)
 
 import serial
 import time
