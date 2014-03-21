@@ -21,8 +21,39 @@ ser = serial.Serial()
 ser.port = 2
 ser.timeout = 1
 Select_GSR = True  
-speed_ms = 50 #frequence de mesure en ms
-sleep = 0.05 #frequence de mesure en s
+speed_ms = 75 #frequence de mesure en ms
+sleep = 0.02 #frequence de mesure en s
+GSR_file = "save_GSR.txt"
+ACC_file = "save.ACC.txt"
+
+maxMSG = 150
+limitG = 15000
+limitA = 15000
+
+
+xminG = 0
+xmaxG = 20000
+yminG = -0.5
+ymaxG = 15
+
+xminA = 0
+xmaxA = 20000
+yminA = -5
+ymaxA = 5
+
+Starting = True
+fig= plt.figure()
+
+i = 0
+
+xG = list()
+yG = list()
+xGtest = list()
+
+xA = list()
+yA1 = list()
+yA2 = list()
+yA3 = list()
 
 class Index:
     ind = 0    
@@ -40,7 +71,35 @@ class Index:
         Select_GSR = not(Select_GSR)
         
     def Save(self, event):
+        global Continu
+        global yG
+        global yA1
+        global yA2
+        global yA3
+        
+        global xG
+        global yG
+        
         SavePNG("figSav", ext="png", close=False, verbose=True)
+        
+        #stop acquisition during saving
+        Continu = False
+        if Select_GSR:
+            my_file = open(GSR_file,"w")
+            my_file.write("GSR Data\n")
+            for g in yG:
+                
+                my_file.write(str(g) + "\n")
+            my_file.close()
+        else:
+            my_file = open(ACC_file,"w")
+            my_file.write("x y z\n")
+            for a in range(len(yA1)):
+                my_file.write(str(yA1[a]) + " " + str(yA2[a])  + " " + str(yA3[a]) + "\n")
+            my_file.close()
+        Continu = True
+            
+        
         
 def SavePNG(path, ext='png', close=True, verbose=True):
     # Extract the directory and filename from the given path
@@ -136,34 +195,7 @@ startGS(ser,speed_ms)
 # Plot Draw  #
 ##############
 
-maxMSG = 100
-limitG = 15000
-limitA = 15000
 
-
-xminG = 0
-xmaxG = 20000
-yminG = -0.5
-ymaxG = 15
-
-xminA = 0
-xmaxA = 20000
-yminA = -5
-ymaxA = 5
-
-Starting = True
-fig= plt.figure()
-
-i = 0
-
-xG = list()
-yG = list()
-xGtest = list()
-
-xA = list()
-yA1 = list()
-yA2 = list()
-yA3 = list()
 
 plt.ion()
 plt.show()
