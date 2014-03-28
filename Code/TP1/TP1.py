@@ -8,6 +8,8 @@ import math
 import matplotlib.pyplot as plt
 import os
 
+import lowpass
+
 from matplotlib.widgets import Button
 
 global AllDataGS
@@ -185,6 +187,7 @@ def startGS(S,ms):
 #Initialization#
 ################
 
+#ser = serial.Serial(3) #Sam
 ser = serial.Serial(2)
 
 print("start program")
@@ -222,6 +225,13 @@ plt.plot([],[],'r',axes=axplot,label='x ACC')
 plt.plot([],[],'g',axes=axplot,label='y ACC')
 plt.plot([],[],'b', axes=axplot,label='z ACC')
 legend = axplot.legend(loc='upper right', shadow=True)
+
+#pour low pass filter
+queueY = []
+queueLen = 10
+for i in range(queueLen) :
+    queueY.append(0)
+
 while i < maxMSG: #a changer : tant que pas stop
     if Continu:
         #Get the data
@@ -233,6 +243,13 @@ while i < maxMSG: #a changer : tant que pas stop
             for g in range (len(DataGS)):
                 xG += [float(DataGS[g][0])]           
                 yG += [float(DataGS[g][1])]
+                #queueY.append(float(DataGS[g][1]))
+                
+                #yG += [lowpass.lowPass(queueY, 50, 50)]
+                
+            if len(queueY) > queueLen :
+                queueY.pop(0)
+                
             plt.plot(xG,yG,'m', axes=axplot,label='GSR')
             indice = xG[len(xG)-1]
             if indice > limitG:
