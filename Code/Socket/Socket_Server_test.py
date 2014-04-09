@@ -7,6 +7,6 @@ connexion_principale.bind(('', 12800))
 connexion_principale.listen(5)
 
 # /!\ commande blocante /!\
-connexion_avec_client, infos_connexion = connexion_principale.accept()
+connexion_avec_client, infos_connexpeion = connexion_principale.accept()
 
 print(infos_connexion)
