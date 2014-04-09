@@ -5,24 +5,21 @@
 import serial
 import time
 import math
+from matplotlib.widgets import Button
 import matplotlib.pyplot as plt
 import os
 
 import lowpass
-
-from matplotlib.widgets import Button
+import movingAverage
 
 global AllDataGS
-global AllDataACC   
+global AllDataACC 
+AllDataACC = []   
+AllDataGS = []
+  
 Continu = False
 Select_GSR = True
 
-AllDataACC = []   
-AllDataGS = []
-ser = serial.Serial()
-ser.port = 2
-ser.timeout = 1
-Select_GSR = True  
 speed_ms = 75 #frequence de mesure en ms
 sleep = 0.02 #frequence de mesure en s
 GSR_file = "save_GSR.txt"
@@ -31,7 +28,6 @@ ACC_file = "save.ACC.txt"
 maxMSG = 150
 limitG = 15000
 limitA = 15000
-
 
 xminG = 0
 xmaxG = 20000
@@ -187,8 +183,17 @@ def startGS(S,ms):
 #Initialization#
 ################
 
-#ser = serial.Serial(3) #Sam
-ser = serial.Serial(2)
+ser = serial.Serial() 
+ser.port = 3
+
+while not ser.isOpen() :
+    try :
+        ser.open()
+    except :
+        if ser.port == 3 :
+            ser.port = 2 #Aina
+        else :
+            ser.port = 3 #Sam
 
 print("start program")
 length = ser.inWaiting()
