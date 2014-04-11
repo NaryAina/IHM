@@ -2,12 +2,13 @@
 #Samuel CONSTANTINO
 #Interface Homme-Machine : TP1 v2 (with data saving in a file this time)
 
-import serial
 import time
 import math
 from matplotlib.widgets import Button
 import matplotlib.pyplot as plt
 import os
+
+import Sensor
 
 import lowpass
 import movingAverage
@@ -96,108 +97,13 @@ class Index:
                 my_file.write(str(yA1[a]) + " " + str(yA2[a])  + " " + str(yA3[a]) + "\n")
             my_file.close()
         Continu = True
-            
         
-        
-def SavePNG(path, ext='png', close=True, verbose=True):
-    # Extract the directory and filename from the given path
-    directory = os.path.split(path)[0]
-    filename = "%s.%s" % (os.path.split(path)[1], ext)
-    if directory == '':
-        directory = '.'
-     
-    # If the directory does not exist, create it
-    if not os.path.exists(directory):
-        os.makedirs(directory)
-     
-    # The final path to save to
-    savepath = os.path.join(directory, filename)    
-    if verbose:
-        print("Saving figure to '%s'..." % savepath),
-     
-    # Save the figure
-    plt.savefig(savepath)
-    if close:
-        plt.close()
-     
-    if verbose:
-        print("Done")
-        
-#Read the data (string) from Sensor S
-def reader(S):
-    out = '' 
-    length = S.inWaiting()
-    out = S.read(length)
-    return out
-   
-#return the data from sensor S (GS,ACC,Others)
-#The data are in string format (of real number)
-def getData(S):
-    
-    #From first data exchange of the sensor :
-    #Format pour le GSR: g,timestamp [ms],gsr-value [??]
-    #Format pour l'accelerometre: a,timestamp [ms],axe-x [g],axe-y [g],axe-z [g]   
-    GS = [] 
-    ACC = []
-    Others = []
-    AllData = reader(S) #string with all data
-    
-    #sort the data into the 3 list GS,ACC and Others
-    AllDataSplit = AllData.splitlines()
-    for l in AllDataSplit:
-        if l[0:2] == 'g,': #GSR Data
-            
-            DataG = l.split(',')
-            if len(DataG) == 3:
-                DataGname = DataG[0]
-                DataGTime = DataG[1]
-                DataGS = DataG[2]
-                GS.append([DataGTime,DataGS])
-            
-        elif l[0:2] == 'a,': #Accelerometer Data
-            DataA = l.split(',')
-            if len(DataA) == 5:
-                DataAname = DataA[0]
-                DataATime = DataA[1]
-                DataAx = DataA[2]
-                DataAy = DataA[3]
-                DataAz = DataA[4]
-                ACC.append([DataATime,DataAx,DataAy,DataAz])
-        else:
-            Others.append(l)
-    
-    return [GS,ACC,Others]
-
-
-#Send stop command
-def stopGS(S):
-    S.write('gstop\n')
-    
-#Start the device, with ms period aquisition 
-def startGS(S,ms):
-    msg = 'gstartf ' + str(ms) + '\n'
-    S.write(msg)
-
 
 ################
 #Initialization#
 ################
 
-ser = serial.Serial() 
-ser.port = 3
-
-while not ser.isOpen() :
-    try :
-        ser.open()
-    except :
-        if ser.port == 3 :
-            ser.port = 2 #Aina
-        else :
-            ser.port = 3 #Sam
-
-print("start program")
-length = ser.inWaiting()
-startGS(ser,speed_ms)
+ser = Sensor.Sensor(speed_ms) 
 
 ##############
 # Plot Draw  #
@@ -241,7 +147,7 @@ for i in range(queueLen) :
 while True: #a changer : tant que pas stop
     if Continu:
         #Get the data
-        DataReader = getData(ser)
+        DataReader = ser.getData()
         i+=1
         DataGS = DataReader[0]
         DataACC = DataReader[1]
@@ -312,6 +218,5 @@ while True: #a changer : tant que pas stop
     else:
         plt.pause(0.05)
 
-stopGS(ser)
-ser.close()
+ser.stopGS()
 print ("end")
