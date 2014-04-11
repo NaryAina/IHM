@@ -15,7 +15,7 @@ class Sensor :
                 else :
                     self.ser.port = 3 #Sam
 
-        print("start program")
+        print("starting sensor")
         length = self.ser.inWaiting()
         self.startGS(speed_ms)
         

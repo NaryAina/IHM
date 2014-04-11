@@ -10,7 +10,7 @@ def main():
     vitesse = cont.actuators['speed_actuator']
     
     #value = player.get(vitesse.propName)
-    value = ManageSpeed.computeSpeed(player.get(vitesse.propName))
+    value = ManageSpeed.computeSpeed(bge.logic.currentGSR)
         
     keyboard = bge.logic.keyboard
     JUST_ACTIVATED = bge.logic.KX_INPUT_JUST_ACTIVATED

@@ -10,7 +10,6 @@ def main():
     ACTIVE = bge.logic.KX_SENSOR_ACTIVE 
     
     if keyboard.events[bge.events.LEFTARROWKEY] == bge.logic.KX_SENSOR_ACTIVE :
-        print("ll")
         cameraController.applyRotation((0,0,-0.2), True)
     if keyboard.events[bge.events.RIGHTARROWKEY] == bge.logic.KX_SENSOR_ACTIVE :
         cameraController.applyRotation((0,0,0.2), True)
@@ -18,6 +17,6 @@ def main():
     #update valeur vitesse
     #cont.activate(vitesse) 
     
-    print('wja')
+    #print('wja')
     
 main()

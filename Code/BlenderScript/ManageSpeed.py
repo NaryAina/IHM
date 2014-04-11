@@ -1,7 +1,9 @@
-def computeSpeed(lastValue) :
+def computeSpeed(valueGSR) :
 
-    #min 2
+    if valueGSR >= 2 :
     
-    #max 14
-
-    return newValue
+        return valueGSR / 100 - 0.01
+    
+    else :
+    
+        return 0.03

@@ -10,3 +10,6 @@ sock = socket.socket(socket.AF_INET, # Internet
 sock.bind((UDP_IP, UDP_PORT))
 sock.setblocking(0)
 gl.sock = sock
+
+#initialise val gsr
+gl.currentGSR = 0.0
