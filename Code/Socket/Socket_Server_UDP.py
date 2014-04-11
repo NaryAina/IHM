@@ -1,5 +1,5 @@
 import socket
-
+import time
 UDP_IP = "127.0.0.1"
 UDP_PORT = 5005
 cnt = 0
@@ -14,14 +14,15 @@ sock = socket.socket(socket.AF_INET, # Internet
 sock.bind((UDP_IP, UDP_PORT))
 
 print ("Serveur online")
+data, addr = sock.recvfrom(1024) # buffer size is 1024 bytes
+
 while True:
     #wait for a msg
-    data, addr = sock.recvfrom(1024) # buffer size is 1024 bytes
-    print ("received message:", data)
-    print ("time : ",cnt)
+    
+    #print ("received message:", data)
     cnt += 1
-    print("sending msg")
+    print("sending msg : ", cnt)
     send_msg(cnt,addr)
-
+    time.sleep(1)
     
 print ("end server")
