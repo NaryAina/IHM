@@ -12,6 +12,6 @@ class ClientSocket :
     def envoyerMsg(self, msg) :
         try :
             self.sock.sendto(msg, (self.ip, self.port))
-            print "sent!"
+            #print "sent!"
         except :
             pass

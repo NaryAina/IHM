@@ -64,9 +64,9 @@ while True: #a changer : tant que pas stop
             #yG += [lowpass.lowPass(queueY, 50, 50)]
             y = movingAverage.movingAverage(queueY)
             
-            #print y
-            #socket.envoyerMsg(y)
-            socket.envoyerMsg(str(0.1))
+            print y
+            socket.envoyerMsg(str(y))
+            #socket.envoyerMsg(str(0.1))
             
         except: #si bug et n'arrive pas a convertir string
             pass     
