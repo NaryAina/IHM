@@ -1,5 +1,5 @@
 import socket
 from bge import logic as gl
 
-gl.socket.close()
+gl.sock.close()
 print("close socket")
