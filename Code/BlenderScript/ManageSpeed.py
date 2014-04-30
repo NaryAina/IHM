@@ -5,4 +5,4 @@ def computeSpeed(valueGSR) :
     if valueGSR >= 2 :
         return valueGSR / 100 - 0.01
     else :
-        return 0.03
+        return 0.01 #a regler...
