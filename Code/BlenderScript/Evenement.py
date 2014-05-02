@@ -12,8 +12,6 @@
 
 import time
 
-
-
 ########################################
 # Events
 ########################################  
@@ -22,36 +20,40 @@ import time
 
 class Evenement(object) :
 
-    self.tempsReel =0
-    self.timer = 0
-    self.finished = False
+    __tempsReel = 0
+    __timer = 0
+    finished = False
 
-    def __init__(self, currentTime): 
-        self.tempsReel = time.time()
-        self.setTimer(currentTime)
+    def __init__(self, listArg): 
+        self.__tempsReel = time.time()
+        print(self.__tempsReel)
         # import logic
-        # if self.timer > gl.challengeTimer :
-        # gl.challengeTimer = self.timer
-        self.startEvent()
+        # if self.__timer > gl.challenge__timer :
+        #   gl.challenge__timer = self.__timer
+        self.startEvent(listArg)
       
-    #Create effects for event
-    def startEvent(self) :
+    #Create effects for event + set the timer here!
+    def startEvent(self,listArg) :
         #add graphics etc
         pass
       
     #Passes time & finishes if no more
     def run(self):
         """
-        self.timer -= 1
-            if (self.timer <= 0) :
+        self.__timer -= 1
+            if (self.__timer <= 0) :
                 self.finished = True
         """
+        #print(__tempsReel)
         # Each one second
-        if (self.tempsReel - time.time()) >= 1.0 :
-            self.timer -= 1
-            if (self.timer <= 0) :
+        #print(self.__tempsReel - time.time())
+
+        if (time.time() - self.__tempsReel) >= 1.0 :
+            self.__timer -= 1
+            if (self.__timer <= 0) :
                 self.finished = True
-            self.tempsReel = time.time()
+            self.__tempsReel = time.time()
+            print("OK")
             
     #Cleaning
     def finish(self) :
@@ -59,10 +61,8 @@ class Evenement(object) :
         pass
     
     #Sets how much time
-    def setTimer(self, currentTime) :
-        #random timer or according to current...
-        pass
-
+    def setTimer(self, temps) :
+        self.__timer = temps
         
         
 ########################################
@@ -71,9 +71,9 @@ class Evenement(object) :
         
 class Mission(Evenement) :
     
-    self.won = False
-    self.points = 0
-    self.wonTime = 0
+    won = False
+    points = 0
+    wonTime = 0
         
     #Condition to win - returns boolean    
     def verifyCondition(self) :
@@ -92,12 +92,12 @@ class Mission(Evenement) :
         
     #Cleaning + calls win if won is True + gives points won
     def finish(self) :
-        self.super()
+        super().finish()
         if (self.won) :
             self.win()
         self.__giveReward()
     
-    #Add points & time to score & challenge timer
+    #Add points & time to score & challenge __timer
     def __giveReward(self) :
         # A COMPLETER!!!!!
         #import bge etc...
@@ -111,21 +111,21 @@ class Mission(Evenement) :
         
 class ActionMission(Mission) :
     #Finish and win if condition
-    def run(self) :  
-        self.super()
+    def run(self) :
+        super().run()
         if self.verifyCondition() :
             self.finish = True
             self.won = True
             
 class DangerMission(Mission) :
     #base case is that will win after time finished
-    def __init__(self, currentTime):      
-        self.super(currentTime)
+    def __init__(self, listArg):      
+        super().__init__(listArg)
         self.won = True
         
     #Lose and finish if condition
     def run(self) :  
-        self.super()
+        super().run()
         if self.verifyCondition() :
             self.finish = True
             self.won = False
@@ -133,6 +133,6 @@ class DangerMission(Mission) :
 class WaitingMission(Mission) :
     #Wins but continues until time    
     def run(self) :  
-        self.super()
+        super().run()
         if self.verifyCondition() :
             self.won = True
