@@ -8,16 +8,26 @@
 
 # (note : on peut peut-etre utiliser des evenements quand fini mission pour afficher resultats ("gagne tant de points"...))
 
+
+
+import time
+
+
+
 ########################################
 # Events
 ########################################  
 
+
+
 class Evenement(object) :
 
+    self.tempsReel =0
     self.timer = 0
     self.finished = False
 
-    def __init__(self, currentTime):      
+    def __init__(self, currentTime): 
+        self.tempsReel = time.time()
         self.setTimer(currentTime)
         # import logic
         # if self.timer > gl.challengeTimer :
@@ -31,9 +41,17 @@ class Evenement(object) :
       
     #Passes time & finishes if no more
     def run(self):
+        """
         self.timer -= 1
-        if (self.timer <= 0) :
-            self.finished = True
+            if (self.timer <= 0) :
+                self.finished = True
+        """
+        # Each one second
+        if (self.tempsReel - time.time()) >= 1.0 :
+            self.timer -= 1
+            if (self.timer <= 0) :
+                self.finished = True
+            self.tempsReel = time.time()
             
     #Cleaning
     def finish(self) :
@@ -45,6 +63,8 @@ class Evenement(object) :
         #random timer or according to current...
         pass
 
+        
+        
 ########################################
 # Missions
 ########################################        
