@@ -11,7 +11,7 @@ if gl.globalDict["modeChallenge"] :
 
     #Updates missions & score
     gl.globalDict["challenge"].run()
-
+        
     #Affichage dans UI
     obl["UIspeed"].text = "Speed : " +  str( round(gl.currentGSR, 2))
     
