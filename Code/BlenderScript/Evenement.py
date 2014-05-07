@@ -26,14 +26,14 @@ class Evenement(object) :
 
     def __init__(self, listArg): 
         self.__tempsReel = time.time()
-        print(self.__tempsReel)
+        #print(self.__tempsReel)
         # import logic
         # if self.__timer > gl.challenge__timer :
         #   gl.challenge__timer = self.__timer
-        self.startEvent(listArg)
+        self.start(listArg)
       
     #Create effects for event + set the timer here!
-    def startEvent(self,listArg) :
+    def start(self,listArg) :
         #add graphics etc
         pass
       
@@ -53,7 +53,7 @@ class Evenement(object) :
             if (self.__timer <= 0) :
                 self.finished = True
             self.__tempsReel = time.time()
-            print("OK")
+            #print("OK")
             
     #Cleaning
     def finish(self) :
