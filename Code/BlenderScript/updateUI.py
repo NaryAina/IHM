@@ -14,6 +14,7 @@ if gl.globalDict["modeChallenge"] :
         
     #Affichage dans UI
     obl["UIspeed"].text = "Speed : " +  str( round(gl.currentGSR, 2))
+    obl["UItime"].text = str( gl.globalDict["challenge"].timer )
     
 else:
     obl["UI"].setVisible(False, True)

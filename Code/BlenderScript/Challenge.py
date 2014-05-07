@@ -12,7 +12,7 @@ class Challenge(object) :
         self.liste_mission = []
         self.liste_evenement = []
         self.score = 0
-        self.timer = 4
+        self.timer = 30
         self.timer_no_mission = -1
         self.timer_no_event = -1
         self.totalTime = 0
@@ -41,21 +41,30 @@ class Challenge(object) :
             pass
         
         #launches 'run()' for every mission in the mission list
-        i = 0
-        while i < len(self.liste_mission) :
-            self.liste_mission[i].run()
-            if self.liste_mission[i].finished :
-                self.liste_mission[i].finish() #cleaning
+        for mission in self.liste_mission :
+            mission.run()
+            if mission.finished :
+                mission.finish() #cleaning
                 
                 #if win
-                if self.liste_mission[i].won :
-                    self.score += self.liste_mission[i].points
-                    self.timer += self.liste_mission[i].wonTime
-                        
-                self.liste_mission.pop(i) #deleting
+                if mission.won :
+                    print("a"+str(self.timer))
+                    self.score +=  mission.points
+                    self.timer +=  mission.wonTime
+                    print("mission won")
+                    
+                    print("w"+str(mission.wonTime))
+                    print("p"+str(self.timer))
+                else :
+                    print("mission lost")
+                
                 self.timer_no_mission = 0
-            else :
-                i += 1
+
+        #Deleting
+        for i in range(len(self.liste_mission)) :
+            if self.liste_mission[i].finished :
+                self.liste_mission.pop(i)
+                print("mission erased")
                 
         #launches 'run()' for every event in the event list
         i = 0
@@ -96,16 +105,17 @@ class Challenge(object) :
 #--------------------------------------------
 # Initialise
 #--------------------------------------------
-            
-#Initialisation liste challenge 
-gl.globalDict["challenge"] = Challenge()
 
-gl.currentGSR = 2
-
-mission = Missions.MissionVariate([3]) 
-gl.globalDict["challenge"].liste_mission.append(mission)
-
-"""
-for i in inspect.getmembers(Missions) :
-    print(i)
-"""
+def main() :
+    #Initialisation liste challenge 
+    gl.globalDict["challenge"] = Challenge()
+    
+    gl.currentGSR = 0.0 #TEMPORAIRE!!!!!!!!!!!
+    
+    #mission = Missions.MissionVariate([5]) 
+    mission = Missions.MissionVariateWait([3, 10]) 
+    #mission = Missions.EvenementWhat([3]) 
+    gl.globalDict["challenge"].liste_mission.append(mission)
+    
+if __name__ == "__main__":
+    main()

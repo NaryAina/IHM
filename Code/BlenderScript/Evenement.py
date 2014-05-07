@@ -19,18 +19,11 @@ import time
 
 
 class Evenement(object) :
-
-    __tempsReel = 0
-    __timer = 0
-    finished = False
-
     def __init__(self, listArg): 
+        self.finished = False
+        
         self.__tempsReel = time.time()
-        #print(self.__tempsReel)
-        # import logic
-        # if self.__timer > gl.challenge__timer :
-        #   gl.challenge__timer = self.__timer
-        self.setTimer(listArg[0]) 
+        self.setTimer(listArg)
         self.start(listArg)
       
     #Create effects for event + set the timer here!
@@ -40,21 +33,12 @@ class Evenement(object) :
       
     #Passes time & finishes if no more
     def run(self):
-        """
-        self.__timer -= 1
-            if (self.__timer <= 0) :
-                self.finished = True
-        """
-        #print(__tempsReel)
-        # Each one second
-        #print(self.__tempsReel - time.time())
-
         if (time.time() - self.__tempsReel) >= 1.0 :
             self.__timer -= 1
             if (self.__timer <= 0) :
                 self.finished = True
             self.__tempsReel = time.time()
-            #print("OK")
+            print("1 sec")
             
     #Cleaning
     def finish(self) :
@@ -63,18 +47,21 @@ class Evenement(object) :
     
     #Sets how much time
     def setTimer(self, temps) :
-        self.__timer = temps
-        
+        #self.__timer = temps
+        self.__timer = temps[0]
+       
         
 ########################################
 # Missions
 ########################################        
         
 class Mission(Evenement) :
-    
-    won = False
-    points = 0
-    wonTime = 0
+    def __init__(self, listArg): 
+        super().__init__(listArg)
+        #Attributes
+        self.points = 0
+        self.wonTime = 0
+        self.won = False
         
     #Condition to win - returns boolean    
     def verifyCondition(self) :
@@ -84,12 +71,12 @@ class Mission(Evenement) :
 # Main types of missions
 ########################################
         
-class ActionMission(Mission) :
+class ActionMission(Mission) :    
     #Finish and win if condition
     def run(self) :
         super().run()
         if self.verifyCondition() :
-            self.finish = True
+            self.finished = True
             self.won = True
             
 class DangerMission(Mission) :
@@ -102,10 +89,10 @@ class DangerMission(Mission) :
     def run(self) :  
         super().run()
         if self.verifyCondition() :
-            self.finish = True
+            self.finished = True
             self.won = False
     
-class WaitingMission(Mission) :
+class WaitingMission(Mission) :    
     #Wins but continues until time    
     def run(self) :  
         super().run()
