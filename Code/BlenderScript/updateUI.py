@@ -1,26 +1,19 @@
 # Updates the UI information
-#
+# runs the challenge guide (which selects & runs missions)
 
-###VERIFY IF MISSION MODE!!!!
-
-import Missions
+import Challenge
 from bge import logic as gl
 
-liste_mission = gl.globalDict["liste_mission"]
+scn = gl.getCurrentScene()
+obl = scn.objects
 
-#for m in gl.globalDict["liste_mission"] :
-i = 0
-while i < len(liste_mission) :
-    liste_mission[i].run()
-    if liste_mission[i].finished :
-        liste_mission[i].finish()
-        liste_mission.pop(i)
-    else :
-        i += 1
+if gl.globalDict["modeChallenge"] :
 
-#from bge import logic as gl
+    #Updates missions & score
+    gl.globalDict["challenge"].run()
 
-#scn = gl.getCurrentScene()
-#obl = scn.objects
-
-#obl["UIscore"].text = "WHAT"
+    #Affichage dans UI
+    obl["UIspeed"].text = "Speed : " +  str( round(gl.currentGSR, 2))
+    
+else:
+    obl["UI"].setVisible(False, True)

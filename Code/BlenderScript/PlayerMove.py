@@ -32,12 +32,4 @@ def main():
     #Rotation
     player.applyRotation((0,0,player.get(vitesse.propName)), True)
    
-    #Affichage dans UI
-    scn = gl.getCurrentScene()
-    obl = scn.objects
-    if gl.globalDict["modeChallenge"] :
-        obl["UIspeed"].text = "Speed : " +  str( round(gl.currentGSR, 2))
-    else:
-        obl["UIspeed"].setVisible(False, True)
-             
 main()
