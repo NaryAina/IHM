@@ -78,32 +78,6 @@ class Mission(Evenement) :
     #Condition to win - returns boolean    
     def verifyCondition(self) :
         pass
-    
-    #Defines what wins
-    def win(self) :
-        #something to self.points = 0
-        #something to self.wonTime = 0
-        pass
-        
-    #(Losing points if needed)
-    def lose(self) :
-        #same as win...
-        pass
-        
-    #Cleaning + calls win if won is True + gives points won
-    def finish(self) :
-        super().finish()
-        if (self.won) :
-            self.win()
-        self.__giveReward()
-    
-    #Add points & time to score & challenge __timer
-    def __giveReward(self) :
-        # A COMPLETER!!!!!
-        #import bge etc...
-        #bl.score += ...
-        # .........
-        pass
         
 ########################################
 # Main types of missions
