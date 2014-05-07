@@ -30,6 +30,7 @@ class Evenement(object) :
         # import logic
         # if self.__timer > gl.challenge__timer :
         #   gl.challenge__timer = self.__timer
+        self.setTimer(listArg[0]) 
         self.start(listArg)
       
     #Create effects for event + set the timer here!

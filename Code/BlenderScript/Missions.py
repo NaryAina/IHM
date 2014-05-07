@@ -86,13 +86,13 @@ class MissionSlowDown(ActionMission):
     def start(self,listArg) :
         speed_start = round(gl.currentGSR, 2)
         coef = 0.7
-        speed_target = speed_start*coef
-        points = 100
-        wonTime = 10
+        self.speed_target = speed_start*coef
+        self.points = 100
+        self.wonTime = 10
         
     def verifyCondition(self) :
         speed_current = round(gl.currentGSR, 2)
-        if speed_current <= speed_target:
+        if speed_current <= self.speed_target:
             return True
         else:
             return False        
@@ -101,13 +101,13 @@ class MissionSpeedUp(ActionMission):
     def start(self,listArg) :
         speed_start = round(gl.currentGSR, 2)
         coef = 1.3
-        speed_target = speed_start*coef
-        points = 100
-        wonTime = 10
+        self.speed_target = speed_start*coef
+        self.points = 100
+        self.wonTime = 10
         
     def verifyCondition(self) :
         speed_current = round(gl.currentGSR, 2)
-        if speed_current >= speed_target:
+        if speed_current >= self.speed_target:
             return True
         else:
             return False  
@@ -116,30 +116,30 @@ class MissionSpeedUp(ActionMission):
 class MissionVariate(DangerMission) :
 
     def start(self,listArg) :
-        speed_start = round(gl.currentGSR, 2)
-        speed_limit = 2.5
-        points = 100
-        wonTime = 10
+        self.speed_start = round(gl.currentGSR, 2)
+        self.speed_limit = 2.5
+        self.points = 100
+        self.wonTime = 10
         
     def verifyCondition(self) :    
         speed_current = round(gl.currentGSR, 2)
-        speed_comp = abs(speed_start - speed_current)
-        if speed_comp < speed_limit:
+        speed_comp = abs(self.speed_start - speed_current)
+        if speed_comp < self.speed_limit:
             return True
         else:
             return False
         
-class MissionDSlow(DangerMission) :
+class MissionDSlowDown(DangerMission) :
     def start(self,listArg) :
         speed_start = round(gl.currentGSR, 2)
         speed_modifier = 1.5
-        speed_limit = speed_start - speed_limit
-        points = 100
-        wonTime = 10
+        self.speed_limit = speed_start - speed_limit
+        self.points = 100
+        self.wonTime = 10
         
     def verifyCondition(self) :    
         speed_current = round(gl.currentGSR, 2)
-        if speed_current < speed_limit:
+        if speed_current < self.speed_limit:
             return True
         else:
             return False  
@@ -148,13 +148,13 @@ class MissionDSpeedUp(DangerMission) :
     def start(self,listArg) :
         speed_start = round(gl.currentGSR, 2)
         speed_modifier = 1.5
-        speed_limit = speed_start + speed_limit
-        points = 100
-        wonTime = 10
+        self.speed_limit = speed_start + speed_limit
+        self.points = 100
+        self.wonTime = 10
         
     def verifyCondition(self) :    
         speed_current = round(gl.currentGSR, 2)
-        if speed_current > speed_limit:
+        if speed_current > self.speed_limit:
             return True
         else:
             return False  

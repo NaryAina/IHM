@@ -12,7 +12,7 @@ class Challenge(object) :
         self.liste_mission = []
         self.liste_evenement = []
         self.score = 0
-        self.timer = 30
+        self.timer = 4
         self.timer_no_mission = -1
         self.timer_no_event = -1
         self.totalTime = 0
@@ -100,8 +100,10 @@ class Challenge(object) :
 #Initialisation liste challenge 
 gl.globalDict["challenge"] = Challenge()
 
-mission = Missions.MissionVariate([]) 
-self.liste_mission.append(mission)
+gl.currentGSR = 2
+
+mission = Missions.MissionVariate([3]) 
+gl.globalDict["challenge"].liste_mission.append(mission)
 
 """
 for i in inspect.getmembers(Missions) :
