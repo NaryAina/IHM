@@ -88,8 +88,7 @@ class MissionSlowDown(ActionMission):
         speed_start = round(gl.currentGSR, 2)
         coef = 0.7
         self.speed_target = speed_start*coef
-        self.points = 100
-        self.wonTime = 10
+        self.setReward(10,100)
         
     def verifyCondition(self) :
         speed_current = round(gl.currentGSR, 2)
@@ -103,8 +102,7 @@ class MissionSpeedUp(ActionMission):
         speed_start = round(gl.currentGSR, 2)
         coef = 1.3
         self.speed_target = speed_start*coef
-        self.points = 100
-        self.wonTime = 10
+        self.setReward(10,100)
         
     def verifyCondition(self) :
         speed_current = round(gl.currentGSR, 2)
@@ -118,8 +116,7 @@ class MissionVariate(DangerMission) :
     def start(self,listArg) :
         self.speed_start = round(gl.currentGSR, 2)
         self.speed_limit = 2.5
-        self.points = 100
-        self.wonTime = 10
+        self.setReward(10,100)
         
     def verifyCondition(self) :  
         speed_current = round(gl.currentGSR, 2)
@@ -135,8 +132,7 @@ class MissionDSlowDown(DangerMission) :
         speed_start = round(gl.currentGSR, 2)
         speed_modifier = 1.5
         self.speed_limit = speed_start - speed_limit
-        self.points = 100
-        self.wonTime = 10
+        self.setReward(10,100)
         
     def verifyCondition(self) :    
         speed_current = round(gl.currentGSR, 2)
@@ -150,8 +146,7 @@ class MissionDSpeedUp(DangerMission) :
         speed_start = round(gl.currentGSR, 2)
         speed_modifier = 1.5
         self.speed_limit = speed_start + speed_limit
-        self.points = 100
-        self.wonTime = 10
+        self.setReward(10,100)
         
     def verifyCondition(self) :    
         speed_current = round(gl.currentGSR, 2)
@@ -165,20 +160,12 @@ class MissionVariateWait(WaitingMission) :
         #self.speed_start = round(gl.currentGSR, 2)
         self.speed_start = 22
         self.speed_limit = 2.5
-        self.points = 100
-        self.wonTime = listArg[1]
-        print("Start : " + str(self.speed_start) + " " + str(self.wonTime ))
-        print( " point" + str(self.points )) 
-        self.truc = 42       
-        print( " truc" + str(self.truc )) 
-        #print(str(self.__timer))
+        #time, point
+        self.setReward(listArg[1],100)
         
     def verifyCondition(self) :  
         speed_current = round(gl.currentGSR, 2)
         speed_comp = abs(self.speed_start - speed_current)
-        print("verif : " + str(self.speed_start) + " " + str(self.wonTime ))
-        print( " point" + str(self.points ))
-        print( " truc" + str(self.truc )) 
         if speed_comp < self.speed_limit:
             return True
         else:

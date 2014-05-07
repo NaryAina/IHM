@@ -48,16 +48,11 @@ class Challenge(object) :
                 
                 #if win
                 if mission.won :
-                    print("a"+str(self.timer))
                     self.score +=  mission.points
                     self.timer +=  mission.wonTime
                     print("mission won")
-                    
-                    print("w"+str(mission.wonTime))
-                    print("p"+str(self.timer))
                 else :
                     print("mission lost")
-                
                 self.timer_no_mission = 0
 
         #Deleting

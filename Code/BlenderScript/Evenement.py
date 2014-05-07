@@ -49,6 +49,7 @@ class Evenement(object) :
     def setTimer(self, temps) :
         #self.__timer = temps
         self.__timer = temps[0]
+        
        
         
 ########################################
@@ -59,13 +60,16 @@ class Mission(Evenement) :
     def __init__(self, listArg): 
         super().__init__(listArg)
         #Attributes
-        self.points = 0
-        self.wonTime = 0
         self.won = False
         
     #Condition to win - returns boolean    
     def verifyCondition(self) :
         pass
+    
+    #Sets how much score and time this mission will give
+    def setReward(self, time, score) :
+        self.wonTime = time
+        self.points = score
         
 ########################################
 # Main types of missions
