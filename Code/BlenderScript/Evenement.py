@@ -1,10 +1,14 @@
 #Lifecycle of Missions & Events :
-#   init and add it to stack of events
-#   each tick, run() on all memebers of stack
+#   1- intiantiate mission
+#   2- set timer, difficulty
+#   3- start() and add it to stack of events
+#   4- each tick, run() is launched on all memebers of stack
 #   and verifies if boolean finished
 #   if true, then does finish() and removes from stack
 
 #__init__() et run() pas besoin de redefinir (pas sur pour run - depend comment va marcher...)
+
+#TOUJOURS APPELER SUPER()....() dans redef!!!
 
 # (note : on peut peut-etre utiliser des evenements quand fini mission pour afficher resultats ("gagne tant de points"...))
 
@@ -19,26 +23,25 @@ import time
 
 
 class Evenement(object) :
-    def __init__(self, listArg): 
+    def __init__(self): 
         self.finished = False
-        
-        self.__tempsReel = time.time()
-        self.setTimer(listArg)
-        self.start(listArg)
       
     #Create effects for event + set the timer here!
-    def start(self,listArg) :
+    def start(self) :
+        #start the timer
+        self.__tempsReel = time.time()
+        
         #add graphics etc
         pass
       
     #Passes time & finishes if no more
     def run(self):
         if (time.time() - self.__tempsReel) >= 1.0 :
-            self.__timer -= 1
-            if (self.__timer <= 0) :
+            self.timer -= 1
+            if (self.timer <= 0) :
                 self.finished = True
             self.__tempsReel = time.time()
-            print("1 sec")
+            #print("1 sec")
             
     #Cleaning
     def finish(self) :
@@ -47,29 +50,29 @@ class Evenement(object) :
     
     #Sets how much time
     def setTimer(self, temps) :
-        #self.__timer = temps
-        self.__timer = temps[0]
-        
-       
+        self.timeSpent = temps #pour garder en memoire
+        self.timer = temps     
         
 ########################################
 # Missions
 ########################################        
         
 class Mission(Evenement) :
-    def __init__(self, listArg): 
-        super().__init__(listArg)
+    def __init__(self): 
+        super().__init__()
         #Attributes
         self.won = False
         
     #Condition to win - returns boolean    
     def verifyCondition(self) :
         pass
-    
-    #Sets how much score and time this mission will give
-    def setReward(self, time, score) :
-        self.wonTime = time
-        self.points = score
+        
+    def setTitle(self, title) :
+        self.title = title
+        
+    #sets parameter to be used in condition, according to difficulty
+    def setDifficulty(self, difficulty):
+        pass
         
 ########################################
 # Main types of missions
@@ -85,8 +88,8 @@ class ActionMission(Mission) :
             
 class DangerMission(Mission) :
     #base case is that will win after time finished
-    def __init__(self, listArg):      
-        super().__init__(listArg)
+    def __init__(self):      
+        super().__init__()
         self.won = True
         
     #Lose and finish if condition

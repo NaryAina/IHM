@@ -3,8 +3,8 @@ from bge import logic as gl
 
 class EvenementWhat(Evenement) :      
     #Create effects for event
-    def start(self,listArg) :
-        super().start(listArg)
+    def start(self) :
+        super().start()
         
         from bge import logic as gl
 
@@ -13,7 +13,7 @@ class EvenementWhat(Evenement) :
 
         obl["UIscore"].text = "WHAT"    
             
-        #self.setTimer(listArg)    
+        #self.setTimer()    
             
             
     #Cleaning
@@ -26,21 +26,21 @@ class EvenementWhat(Evenement) :
 
         obl["UIscore"].text = "Score"    
         
-
-class Evenement2(Evenement) :      
+#-----------------------------------------------   
+# Events
+#-----------------------------------------------           
+   
+class EvenementMessageMission(Evenement) :      
     #Create effects for event
-    def start(self,listArg) :
-        super().start(listArg)
+    def start(self) :
+        super().start()
         
         from bge import logic as gl
 
         scn = gl.getCurrentScene()
         obl = scn.objects
 
-        obl["UIscore"].text = "event2"    
-            
-        self.setTimer(listArg[0])    
-            
+        obl["UImessageMission"].text = "WHAT"                
             
     #Cleaning
     def finish(self) :
@@ -50,45 +50,27 @@ class Evenement2(Evenement) :
         scn = gl.getCurrentScene()
         obl = scn.objects
 
-        obl["UIscore"].text = "Score"    
-        
-                
-
-class Evenement3(Evenement) :      
-    #Create effects for event
-    def start(self,listArg) :
-        super().start(listArg)
-        
-        from bge import logic as gl
-
-        scn = gl.getCurrentScene()
-        obl = scn.objects
-
-        obl["UIscore"].text = "event3"    
-            
-        self.setTimer(3)    
-            
-            
-    #Cleaning
-    def finish(self) :
-        super().finish()
-        from bge import logic as gl
-
-        scn = gl.getCurrentScene()
-        obl = scn.objects
-
-        obl["UIscore"].text = "Score"    
+        obl["UIscore"].text = "Score"   
    
 #-----------------------------------------------   
 # Missions
 #-----------------------------------------------   
    
 class MissionSlowDown(ActionMission):
-    def start(self,listArg) :
+    def setDifficulty(self, difficulty) :
+        if difficulty <= 0:
+            self.coef = 0.7
+        elif difficulty == 1 :
+            self.coef = 0.6
+        else :
+            self.coef = 0.5
+            
+    def start(self) :
+        super().start()
         speed_start = round(gl.currentGSR, 2)
-        coef = 0.7
-        self.speed_target = speed_start*coef
-        self.setReward(10,100)
+        self.speed_target = speed_start*self.coef
+
+        self.setTitle("Slow down to " + str(round(self.speed_target,2)) + "!")
         
     def verifyCondition(self) :
         speed_current = round(gl.currentGSR, 2)
@@ -98,11 +80,20 @@ class MissionSlowDown(ActionMission):
             return False        
 
 class MissionSpeedUp(ActionMission):
-    def start(self,listArg) :
+    def setDifficulty(self, difficulty) :
+        if difficulty <= 0:
+            self.coef = 1.3
+        elif difficulty == 1 :
+            self.coef = 1.5
+        else :
+            self.coef = 1.6
+
+    def start(self) :
+        super().start()
         speed_start = round(gl.currentGSR, 2)
-        coef = 1.3
-        self.speed_target = speed_start*coef
-        self.setReward(10,100)
+        self.speed_target = speed_start*self.coef
+
+        self.setTitle("Speed up to " + str(round(self.speed_target,2)) + "!")
         
     def verifyCondition(self) :
         speed_current = round(gl.currentGSR, 2)
@@ -113,10 +104,19 @@ class MissionSpeedUp(ActionMission):
             
 #mission : ne pas depasser une fourchette de variation
 class MissionVariate(DangerMission) :
-    def start(self,listArg) :
+    def setDifficulty(self, difficulty) :
+        if difficulty <= 0:
+            self.speed_limit = 2.5
+        elif difficulty == 1 :
+            self.speed_limit = 2.3
+        else :
+            self.speed_limit = 2
+
+    def start(self) :
+        super().start()
         self.speed_start = round(gl.currentGSR, 2)
-        self.speed_limit = 2.5
-        self.setReward(10,100)
+
+        self.setTitle("Don't change your speed!")
         
     def verifyCondition(self) :  
         speed_current = round(gl.currentGSR, 2)
@@ -127,12 +127,21 @@ class MissionVariate(DangerMission) :
         else:
             return False
         
-class MissionDSlowDown(DangerMission) :        
-    def start(self,listArg) :
+class MissionDSlowDown(DangerMission) : 
+    def setDifficulty(self, difficulty) :
+        if difficulty <= 0:
+            self.speed_modifier = 1.5
+        elif difficulty == 1 :
+            self.speed_modifier = 1.3
+        else :
+            self.speed_modifier = 1
+            
+    def start(self) :
+        super().start()
         speed_start = round(gl.currentGSR, 2)
-        speed_modifier = 1.5
-        self.speed_limit = speed_start - speed_limit
-        self.setReward(10,100)
+        self.speed_limit = speed_start - self.speed_modifier
+
+        self.setTitle("Don't reach " + str(round(self.speed_limit,2)) + "!")
         
     def verifyCondition(self) :    
         speed_current = round(gl.currentGSR, 2)
@@ -141,12 +150,21 @@ class MissionDSlowDown(DangerMission) :
         else:
             return False  
 
-class MissionDSpeedUp(DangerMission) :        
-    def start(self,listArg) :
+class MissionDSpeedUp(DangerMission) : 
+    def setDifficulty(self, difficulty) :
+        if difficulty <= 0:
+            self.speed_modifier = 1.5
+        elif difficulty == 1 :
+            self.speed_modifier = 1.3
+        else :
+            self.speed_modifier = 1
+       
+    def start(self) :
+        super().start()
         speed_start = round(gl.currentGSR, 2)
-        speed_modifier = 1.5
-        self.speed_limit = speed_start + speed_limit
-        self.setReward(10,100)
+        self.speed_limit = speed_start +  self.speed_modifier
+
+        self.setTitle("Don't reach " + str(round(self.speed_limit,2)) + "!")
         
     def verifyCondition(self) :    
         speed_current = round(gl.currentGSR, 2)
@@ -156,12 +174,19 @@ class MissionDSpeedUp(DangerMission) :
             return False  
         
 class MissionVariateWait(WaitingMission) :
-    def start(self,listArg) :
-        #self.speed_start = round(gl.currentGSR, 2)
-        self.speed_start = 22
-        self.speed_limit = 2.5
-        #time, point
-        self.setReward(listArg[1],100)
+    def setDifficulty(self, difficulty) :
+        if difficulty <= 0:
+            self.speed_limit = 2.5
+        elif difficulty == 1 :
+            self.speed_limit = 2.3
+        else :
+            self.speed_limit = 2
+
+    def start(self) :
+        super().start()
+        self.speed_start = round(gl.currentGSR, 2)
+
+        self.setTitle("Stay at " + str(self.speed_start) + "!")
         
     def verifyCondition(self) :  
         speed_current = round(gl.currentGSR, 2)
