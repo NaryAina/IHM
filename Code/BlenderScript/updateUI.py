@@ -11,14 +11,16 @@ if gl.globalDict["modeChallenge"] :
 
     #Updates missions & score
     gl.globalDict["challenge"].run()
-        
+       
     #Affichage dans UI
     obl["UItime"].text = str( gl.globalDict["challenge"].timer )
     obl["UIspeed"].text = str( round(gl.currentGSR, 2))
     obl["UIscore"].text = str( gl.globalDict["challenge"].score )
+    obl["UIdifficulty"].text = str( gl.globalDict["challenge"].difficulty + 1)
     
     obl["UIscoreText"].text = "Score :"
     obl["UIspeedText"].text = "Speed"
+    obl["UIdifficultyText"].text = "Level"
     
     #Affichage des missions
     affichage = ""

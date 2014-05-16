@@ -195,3 +195,49 @@ class MissionVariateWait(WaitingMission) :
             return True
         else:
             return False
+            
+class MissionRelax(WaitingMission):
+    def setDifficulty(self, difficulty) :
+        if difficulty <= 0:
+            self.more = 1
+        elif difficulty == 1 :
+            self.more = 3
+        else :
+            self.more = 5
+            
+    def start(self) :
+        super().start()
+        speed_start = round(gl.currentGSR, 2)
+        self.speed_target = speed_start - self.more
+
+        self.setTitle("Try to relax as much\nas possible!")
+        
+    def verifyCondition(self) :
+        speed_current = round(gl.currentGSR, 2)
+        if speed_current <= self.speed_target:
+            return True
+        else:
+            return False        
+
+class MissionAgitate(WaitingMission):
+    def setDifficulty(self, difficulty) :
+        if difficulty <= 0:
+            self.more = 1
+        elif difficulty == 1 :
+            self.more = 3
+        else :
+            self.more = 5
+
+    def start(self) :
+        super().start()
+        speed_start = round(gl.currentGSR, 2)
+        self.speed_target = speed_start + self.more
+
+        self.setTitle("Try to get agitated as\nmuch as possible!")
+        
+    def verifyCondition(self) :
+        speed_current = round(gl.currentGSR, 2)
+        if speed_current >= self.speed_target:
+            return True
+        else:
+            return False  

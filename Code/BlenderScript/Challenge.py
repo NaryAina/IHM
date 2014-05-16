@@ -7,12 +7,12 @@ import Missions
 import SocketUDPClose
 
 #constants
-SIZE_QUEUE_MISSIONS = 9
-MISSION_TYPES = ["ActionSlowDown", "ActionSpeedUp", "DangerVariate", "DangerSlowDown", "DangerSpeedUp", "WaitVariate"]
+MISSION_TYPES = ["ActionSlowDown", "ActionSpeedUp", "DangerVariate", "DangerSlowDown", "DangerSpeedUp", "WaitVariate", "MissionRelax", "MissionAgitate"]
 PROBABILITY_NEW_MISSION = 6
 TIME_MIN_MISSION = 5
 TIME_MAX_MISSION = 20
 BONUS_TIME = 5
+NBR_MISSION_BETWEEN_DIFFICULTIES = 3
 
 class Challenge(object) :
 
@@ -31,6 +31,7 @@ class Challenge(object) :
 
         self.queue_missions = [] #up-coming missions
         self.nbr_mission_won = 0
+        self.nbr_mission_won_since = 0
         
     def run(self) :
         #Game timers
@@ -42,7 +43,7 @@ class Challenge(object) :
             self.timer_no_event += 1
             
             #See if can add a new mission  (each second only)  
-            if len(self.liste_mission) < self.MAX_MISSION and len(self.liste_mission) <= self.difficulty + 1:
+            if len(self.liste_mission) < self.MAX_MISSION and len(self.liste_mission) < self.difficulty + 1:
                 self.addMission()   
                 
             #See if can add a new event (each second only)
@@ -58,15 +59,11 @@ class Challenge(object) :
                 
                 #if win
                 if mission.won :
+                    
                     #score + time won
-                    
                     realTimeSpent = mission.timeSpent #- (mission.timeSpent - mission.timer)
-                    
                     scoreWon =  realTimeSpent * 10 + self.difficulty * 10
-                    #timeWon =  realTimeSpent + float(realTimeSpent/(1+self.difficulty))
-                    
-                    timeWon = mission.timeSpent / (1+self.difficulty) 
-                    timeWon += BONUS_TIME + (1/BONUS_TIME) * (1+self.difficulty) 
+                    timeWon = mission.timeSpent / (1+self.difficulty) + BONUS_TIME + (1/BONUS_TIME) * (1+self.difficulty) 
                     
                     self.score += int(scoreWon)
                     self.timer += int(timeWon)
@@ -75,7 +72,12 @@ class Challenge(object) :
                     print("Score + " + str(scoreWon) + " Time + " + str(timeWon))
                     
                     self.nbr_mission_won += 1
+                    self.nbr_mission_won_since += 1
+                    
                     #augmenter difficulte HERE!!
+                    if self.nbr_mission_won_since >= (NBR_MISSION_BETWEEN_DIFFICULTIES + self.difficulty) :
+                        self.difficulty += 1
+                        self.nbr_mission_won_since = 0
                     
                 else :
                     print("mission lost")
@@ -161,6 +163,10 @@ class Challenge(object) :
             return Missions.MissionDSpeedUp()
         elif type == "WaitVariate" :
             return Missions.MissionVariateWait()
+        elif type == "MissionRelax" :
+            return Missions.MissionRelax()
+        elif type == "MissionAgitate" :
+            return Missions.MissionAgitate()
       
     def addEvent(self) :
         #mission = Missions.EvenementWhat([5]) 
