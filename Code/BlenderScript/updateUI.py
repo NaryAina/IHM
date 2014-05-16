@@ -7,11 +7,14 @@ from bge import logic as gl
 scn = gl.getCurrentScene()
 obl = scn.objects
 
-if gl.globalDict["modeChallenge"] :
+obl["eventWallVision"].visible = False
+obl["eventJumpScare"].visible = False
 
-    #Updates missions & score
-    gl.globalDict["challenge"].run()
+if gl.globalDict["modeChallenge"] :
        
+    #Updates missions & score
+    gl.globalDict["challenge"].runMissions()    
+    
     #Affichage dans UI
     obl["UItime"].text = str( gl.globalDict["challenge"].timer )
     obl["UIspeed"].text = str( round(gl.currentGSR, 2))
@@ -27,6 +30,9 @@ if gl.globalDict["modeChallenge"] :
     for mission in gl.globalDict["challenge"].liste_mission :
         affichage += "> " + mission.title + " (" + str(mission.timer) + ")" + "\n"
     obl["UImissions"].text = affichage
+        
+    #run events (affect UI so as to be called after )
+    gl.globalDict["challenge"].runEvents()      
         
 else:
     obl["UI"].setVisible(False, True)

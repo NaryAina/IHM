@@ -53,6 +53,9 @@ class Evenement(object) :
         self.timeSpent = temps #pour garder en memoire
         self.timer = temps     
         
+    def setTitle(self, title) :
+        self.title = title    
+        
 ########################################
 # Missions
 ########################################        
@@ -66,10 +69,7 @@ class Mission(Evenement) :
     #Condition to win - returns boolean    
     def verifyCondition(self) :
         pass
-        
-    def setTitle(self, title) :
-        self.title = title
-        
+
     #sets parameter to be used in condition, according to difficulty
     def setDifficulty(self, difficulty):
         pass

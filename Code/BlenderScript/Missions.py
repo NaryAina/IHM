@@ -1,58 +1,139 @@
 from Evenement import *
-from bge import logic as gl
-
-class EvenementWhat(Evenement) :      
+from bge import logic as gl 
+import random
+               
+#-----------------------------------------------   
+# Printing messages on screen (mission/results/events)
+#-----------------------------------------------           
+   
+class EvenementMessage(Evenement) :      
     #Create effects for event
     def start(self) :
         super().start()
-        
-        from bge import logic as gl
-
+                        
         scn = gl.getCurrentScene()
         obl = scn.objects
-
-        obl["UIscore"].text = "WHAT"    
+        
+        if self.event :
+            self.object = obl["UIeventText"]
+            self.object.localPosition = [14.52026,-6.65681,4.41221]
+            self.centered = 0 
+        else:
+            self.object = obl["UImessage"]
+            self.object.localPosition = [13.28884,-1.53494,6.01999]
+        
+            self.centered = len(self.message) / 2
+            if self.centered > 8 :
+                self.centered = 8 
+            if len(self.message) > 15 :
+                self.centered = 4
             
-        #self.setTimer()    
-            
+            print("center at " + str(self.centered ))
+        
+        self.centered = 0 
+        
+        self.object.applyMovement((0,-self.centered,0))
             
     #Cleaning
     def finish(self) :
         super().finish()
-        from bge import logic as gl
-
-        scn = gl.getCurrentScene()
-        obl = scn.objects
-
-        obl["UIscore"].text = "Score"    
+        self.object.text = ""   
+        self.object.applyMovement((0,self.centered,0))
         
+    def run(self) :
+        super().run()    
+        self.object.text = self.message
+        self.object.applyMovement((0,0,0.003)) #up movement
+        
+    def setMessageProperties(self, message, event) :
+        self.message = message
+        self.event = event
+
 #-----------------------------------------------   
 # Events
 #-----------------------------------------------           
-   
-class EvenementMessageMission(Evenement) :      
-    #Create effects for event
+
+class EventJumpScare(Evenement) :  
+    #Create effects for event 
     def start(self) :
         super().start()
+        self.setTitle("BOO!")
         
-        from bge import logic as gl
-
+        #get object
         scn = gl.getCurrentScene()
         obl = scn.objects
-
-        obl["UImessageMission"].text = "WHAT"                
-            
+        self.object = obl["eventJumpScare"]
+        
+        self.object.visible = True
+        temps = random.randint(5,15) #5 a 15 secondes
+        self.setTimer(temps)
+        
     #Cleaning
     def finish(self) :
         super().finish()
-        from bge import logic as gl
-
+        self.object.visible = False
+        
+class EventBlackScreen(Evenement) : 
+    #Create effects for event 
+    def start(self) :
+        super().start()
+        self.setTitle("Play in the dark!")
+        
+        #get object
         scn = gl.getCurrentScene()
         obl = scn.objects
+        self.object = obl["eventWallVision"]
+        
+        self.object.visible = True
+        self.setTimer(7)
+        
+    #Cleaning
+    def finish(self) :
+        super().finish()
+        self.object.visible = False
+        
+class EventRotatingScreen(Evenement) :     
+    #Create effects for event 
+    def start(self) :
+        super().start()
+        self.setTitle("Rotating screen!!")
+        
+        #get object
+        scn = gl.getCurrentScene()
+        obl = scn.objects
+        self.objectplayer = obl["CameraController"]
+        
+        temps = random.randint(7,18)
+        self.setTimer(temps)
+        
+        self.speedRotation = random.uniform(0.01,0.09)
+        self.directionRotation = random.choice([-1, 1])
+        
+    def run(self):
+        super().run()
+        self.objectplayer.applyRotation((0,0,self.directionRotation * self.speedRotation), True) #make camera rotate
 
-        obl["UIscore"].text = "Score"   
-   
-#-----------------------------------------------   
+class EventNoCubeMov(Evenement) :    
+    #Create effects for event 
+    def start(self) :
+        super().start()
+        self.setTitle("No rotation cube!")
+        
+        #get object
+        scn = gl.getCurrentScene()
+        obl = scn.objects
+        self.object = obl["player"]
+        self.textVitesse = obl["UIspeed"]
+        
+        temps = random.randint(10,15)
+        self.setTimer(temps)
+        
+    def run(self):
+        super().run()
+        self.object.localOrientation = [0,0,0] #prevents cube from moving
+        self.textVitesse.text = "???"
+
+#----------------------------------   
 # Missions
 #-----------------------------------------------   
    
@@ -233,7 +314,7 @@ class MissionAgitate(WaitingMission):
         speed_start = round(gl.currentGSR, 2)
         self.speed_target = speed_start + self.more
 
-        self.setTitle("Try to get agitated as\nmuch as possible!")
+        self.setTitle("Get excited!!")
         
     def verifyCondition(self) :
         speed_current = round(gl.currentGSR, 2)

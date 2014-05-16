@@ -8,7 +8,9 @@ import SocketUDPClose
 
 #constants
 MISSION_TYPES = ["ActionSlowDown", "ActionSpeedUp", "DangerVariate", "DangerSlowDown", "DangerSpeedUp", "WaitVariate", "MissionRelax", "MissionAgitate"]
+EVENT_TYPES = ["EventBlackScreen", "EventRotatingScreen", "EventNoCubeMov", "EventJumpScare"]
 PROBABILITY_NEW_MISSION = 6
+PROBABILITY_NEW_EVENT = 1 #22
 TIME_MIN_MISSION = 5
 TIME_MAX_MISSION = 20
 BONUS_TIME = 5
@@ -18,25 +20,30 @@ class Challenge(object) :
 
     def __init__(self) :
         self.liste_mission = [] #current on-going missions
-        self.liste_evenement = []
+        self.liste_event = []
         self.score = 0
         self.timer = 20
         self.timer_no_mission = -1
         self.timer_no_event = -1
         self.totalTime = 0
         self.tempsReel = time.time()
+        
         self.difficulty = 0
         self.MAX_MISSION = 5 #nbr de mission en meme temps
-        self.MAX_EVENT = 1 #nbr d'event en meme temps
+        self.MAX_EVENT = 2 #nbr d'event en meme temps
 
         self.queue_missions = [] #up-coming missions
+        self.queue_events = []
         self.nbr_mission_won = 0
         self.nbr_mission_won_since = 0
         
-    def run(self) :
+    # Each logic tick    
+    #----------------
+        
+    def runMissions(self) :
         #Game timers
         if (time.time() - self.tempsReel) >= 1.0 :
-            self.tempsReel = time.time()
+            self.tempsReel = time.time() 
             self.totalTime += 1
             self.timer -= 1
             self.timer_no_mission += 1
@@ -47,8 +54,8 @@ class Challenge(object) :
                 self.addMission()   
                 
             #See if can add a new event (each second only)
-            if len(self.liste_evenement) < self.MAX_EVENT :
-                #self.addEvent()
+            if len(self.liste_event) < self.MAX_EVENT :
+                self.addEvent()
                 pass
         
         #launches 'run()' for every mission in the mission list
@@ -68,6 +75,7 @@ class Challenge(object) :
                     self.score += int(scoreWon)
                     self.timer += int(timeWon)
                     
+                    self.addMessage("Mission Won!", False)
                     print("mission won!")
                     print("Score + " + str(scoreWon) + " Time + " + str(timeWon))
                     
@@ -83,7 +91,7 @@ class Challenge(object) :
                     print("mission lost")
                 self.timer_no_mission = 0
 
-        #Deleting
+        #Deleting old missions
         i = 0
         while i < len(self.liste_mission) :
             if self.liste_mission[i].finished :
@@ -91,20 +99,24 @@ class Challenge(object) :
                 #print("mission erased")
             else :
                 i += 1
-                
-        #launches 'run()' for every event in the event list
-        i = 0
-        while i < len(self.liste_evenement) :
-            self.liste_evenement[i].run()
-            if self.liste_evenement[i].finished :
-                self.liste_evenement[i].finish() #cleaning
-                self.liste_evenement.pop(i) #deleting
-                self.timer_no_event = 0
-            else :
-                i += 1
-    
+
         #Verify if game over
         self.endCondition()
+        
+    def runEvents(self) :
+        #launches 'run()' for every event in the event list
+        i = 0
+        while i < len(self.liste_event) :
+            self.liste_event[i].run()
+            if self.liste_event[i].finished :
+                self.liste_event[i].finish() #cleaning
+                self.liste_event.pop(i) #deleting
+                self.timer_no_event = 0
+            else :
+                i += 1 
+        
+    # For missions    
+    #----------------
     
     def addMission(self) :
                 
@@ -114,7 +126,7 @@ class Challenge(object) :
             
             #verify queue has missions
             if len(self.queue_missions) < 1 :
-                self.generateQueue()
+                self.generateQueueMission()
             
             #creates the mission
             mission = self.generateMission()
@@ -142,9 +154,10 @@ class Challenge(object) :
 
             #add message to display what the mission is
             print(mission.title)
+            self.addMessage(mission.title, False)
     
     #creates a random sequence of missions, without doubles
-    def generateQueue(self) :
+    def generateQueueMission(self) :
         self.queue_missions = list(MISSION_TYPES)
         random.shuffle(self.queue_missions)
     
@@ -167,11 +180,61 @@ class Challenge(object) :
             return Missions.MissionRelax()
         elif type == "MissionAgitate" :
             return Missions.MissionAgitate()
-      
+         
+    # For events   
+    #----------------
+     
     def addEvent(self) :
-        #mission = Missions.EvenementWhat([5]) 
-        #self.liste_mission.append(mission)
-        pass
+        #time min between events
+        if self.timer_no_event >= 7 :
+            #randomly generates an event or not
+            prob_new = random.randint(0, PROBABILITY_NEW_EVENT)
+            if prob_new > (PROBABILITY_NEW_EVENT - self.timer_no_event) :
+                
+                #verify queue has missions
+                if len(self.queue_events) < 1 :
+                    self.generateQueueEvent()
+                
+                #creates the special event
+                #(events have predefined time)
+                #(and no difficulty)
+                evenement = self.generateEvent()
+
+                #launch event
+                evenement.start()
+                self.liste_event.append(evenement)       
+    
+                #add message to display what the mission is
+                print(evenement.title)
+                self.addMessage(evenement.title, True)
+    
+            
+    #creates a random sequence of events, without doubles
+    def generateQueueEvent(self) :
+        self.queue_events = list(EVENT_TYPES)
+        random.shuffle(self.queue_events)
+        
+    def generateEvent(self) :
+        type = self.queue_events.pop(0) #pop first item
+
+        if type == "EventBlackScreen" :
+            return Missions.EventBlackScreen()
+        elif type == "EventRotatingScreen" :
+            return Missions.EventRotatingScreen()
+        elif type == "EventNoCubeMov" :
+            return Missions.EventNoCubeMov()
+        elif type == "EventJumpScare" :
+            return Missions.EventJumpScare()
+    
+    def addMessage(self, message, event) :
+        evenement = Missions.EvenementMessage()
+        evenement.setTimer(4)
+        evenement.setMessageProperties(message, event)
+        evenement.start()
+        gl.globalDict["challenge"].liste_event.append(evenement)
+        
+    # End challenge mode    
+    #----------------
         
     def endCondition(self) :            
         if self.timer < 0 :
@@ -183,7 +246,6 @@ class Challenge(object) :
             #replace scene
             gl.getCurrentScene().replace('GameOver scene')
 
-            
 #--------------------------------------------
 # Initialise
 #--------------------------------------------
@@ -195,10 +257,9 @@ def main() :
     gl.currentGSR = 0.0 #TEMPORAIRE!!!!!!!!!!!
     
     """
-    #mission = Missions.MissionVariate([5]) 
-    mission = Missions.MissionVariateWait([3, 10]) 
-    #mission = Missions.EvenementWhat([3]) 
-    gl.globalDict["challenge"].liste_mission.append(mission)
+    event = Missions.EventNoCubeMov()
+    event.start()
+    gl.globalDict["challenge"].liste_event.append(event)
     """
     
 if __name__ == "__main__":
