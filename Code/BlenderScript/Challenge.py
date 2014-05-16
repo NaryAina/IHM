@@ -10,7 +10,7 @@ import SocketUDPClose
 MISSION_TYPES = ["ActionSlowDown", "ActionSpeedUp", "DangerVariate", "DangerSlowDown", "DangerSpeedUp", "WaitVariate", "MissionRelax", "MissionAgitate"]
 EVENT_TYPES = ["EventBlackScreen", "EventRotatingScreen", "EventNoCubeMov", "EventJumpScare"]
 PROBABILITY_NEW_MISSION = 6
-PROBABILITY_NEW_EVENT = 1 #22
+PROBABILITY_NEW_EVENT = 7 # a regler...
 TIME_MIN_MISSION = 5
 TIME_MAX_MISSION = 20
 BONUS_TIME = 5
@@ -39,8 +39,8 @@ class Challenge(object) :
         
     # Each logic tick    
     #----------------
-        
-    def runMissions(self) :
+    
+    def runTimers(self) :    
         #Game timers
         if (time.time() - self.tempsReel) >= 1.0 :
             self.tempsReel = time.time() 
@@ -56,8 +56,8 @@ class Challenge(object) :
             #See if can add a new event (each second only)
             if len(self.liste_event) < self.MAX_EVENT :
                 self.addEvent()
-                pass
         
+    def runMissions(self) :                
         #launches 'run()' for every mission in the mission list
         for mission in self.liste_mission :
             mission.run()
@@ -228,7 +228,7 @@ class Challenge(object) :
     
     def addMessage(self, message, event) :
         evenement = Missions.EvenementMessage()
-        evenement.setTimer(4)
+        evenement.setTimer(3)
         evenement.setMessageProperties(message, event)
         evenement.start()
         gl.globalDict["challenge"].liste_event.append(evenement)
@@ -244,7 +244,7 @@ class Challenge(object) :
             gl.globalDict["Score"] = self.score
             gl.globalDict["Time"] = self.totalTime
             #replace scene
-            gl.getCurrentScene().replace('GameOver scene')
+            gl.getCurrentScene().replace('GameOverScene')
 
 #--------------------------------------------
 # Initialise

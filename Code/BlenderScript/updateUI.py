@@ -12,6 +12,9 @@ obl["eventJumpScare"].visible = False
 
 if gl.globalDict["modeChallenge"] :
        
+    #run time & conditions & add missions/events
+    gl.globalDict["challenge"].runTimers()   
+       
     #Updates missions & score
     gl.globalDict["challenge"].runMissions()    
     

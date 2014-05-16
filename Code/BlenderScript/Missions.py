@@ -11,6 +11,8 @@ class EvenementMessage(Evenement) :
     def start(self) :
         super().start()
                         
+        SIZE_LETTER = 0.3 #?        
+                        
         scn = gl.getCurrentScene()
         obl = scn.objects
         
@@ -22,15 +24,16 @@ class EvenementMessage(Evenement) :
             self.object = obl["UImessage"]
             self.object.localPosition = [13.28884,-1.53494,6.01999]
         
-            self.centered = len(self.message) / 2
+            self.centered = (len(self.message)*SIZE_LETTER) / 2
+            """
             if self.centered > 8 :
                 self.centered = 8 
             if len(self.message) > 15 :
                 self.centered = 4
-            
+            """
             print("center at " + str(self.centered ))
         
-        self.centered = 0 
+        #self.centered = 0 
         
         self.object.applyMovement((0,-self.centered,0))
             
@@ -64,14 +67,11 @@ class EventJumpScare(Evenement) :
         obl = scn.objects
         self.object = obl["eventJumpScare"]
         
+        self.setTimer(1)
+    
+    def run(self):
+        super().run()
         self.object.visible = True
-        temps = random.randint(5,15) #5 a 15 secondes
-        self.setTimer(temps)
-        
-    #Cleaning
-    def finish(self) :
-        super().finish()
-        self.object.visible = False
         
 class EventBlackScreen(Evenement) : 
     #Create effects for event 
@@ -83,14 +83,13 @@ class EventBlackScreen(Evenement) :
         scn = gl.getCurrentScene()
         obl = scn.objects
         self.object = obl["eventWallVision"]
+
+        temps = random.randint(5,15) #5 a 15 secondes
+        self.setTimer(temps)
         
+    def run(self):
+        super().run()
         self.object.visible = True
-        self.setTimer(7)
-        
-    #Cleaning
-    def finish(self) :
-        super().finish()
-        self.object.visible = False
         
 class EventRotatingScreen(Evenement) :     
     #Create effects for event 
