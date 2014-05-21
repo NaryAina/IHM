@@ -10,11 +10,13 @@ import SocketUDPClose
 MISSION_TYPES = ["ActionSlowDown", "ActionSpeedUp", "DangerVariate", "DangerSlowDown", "DangerSpeedUp", "WaitVariate", "MissionRelax", "MissionAgitate"]
 EVENT_TYPES = ["EventBlackScreen", "EventRotatingScreen", "EventNoCubeMov", "EventJumpScare"]
 PROBABILITY_NEW_MISSION = 6
-PROBABILITY_NEW_EVENT = 7 # a regler...
+PROBABILITY_NEW_EVENT = 22 # a regler...
+TME_NO_RETURN = 2 #no more new missions
 TIME_MIN_MISSION = 5
 TIME_MAX_MISSION = 20
 BONUS_TIME = 5
 NBR_MISSION_BETWEEN_DIFFICULTIES = 3
+TIME_BETWEEN_EVENTS = 15
 
 class Challenge(object) :
 
@@ -37,6 +39,8 @@ class Challenge(object) :
         self.nbr_mission_won = 0
         self.nbr_mission_won_since = 0
         
+        self.idDisplay = 0 #to differentiate objects
+        
     # Each logic tick    
     #----------------
     
@@ -50,7 +54,7 @@ class Challenge(object) :
             self.timer_no_event += 1
             
             #See if can add a new mission  (each second only)  
-            if len(self.liste_mission) < self.MAX_MISSION and len(self.liste_mission) < self.difficulty + 1:
+            if len(self.liste_mission) < self.MAX_MISSION and len(self.liste_mission) < self.difficulty + 1 and self.timer > TME_NO_RETURN :
                 self.addMission()   
                 
             #See if can add a new event (each second only)
@@ -86,6 +90,7 @@ class Challenge(object) :
                     if self.nbr_mission_won_since >= (NBR_MISSION_BETWEEN_DIFFICULTIES + self.difficulty) :
                         self.difficulty += 1
                         self.nbr_mission_won_since = 0
+                        self.addMessage("Level Up!",True)
                     
                 else :
                     print("mission lost")
@@ -109,7 +114,7 @@ class Challenge(object) :
         while i < len(self.liste_event) :
             self.liste_event[i].run()
             if self.liste_event[i].finished :
-                self.liste_event[i].finish() #cleaning
+                self.liste_event[i].finish() #cleaning            
                 self.liste_event.pop(i) #deleting
                 self.timer_no_event = 0
             else :
@@ -186,7 +191,7 @@ class Challenge(object) :
      
     def addEvent(self) :
         #time min between events
-        if self.timer_no_event >= 7 :
+        if self.timer_no_event >= TIME_BETWEEN_EVENTS :
             #randomly generates an event or not
             prob_new = random.randint(0, PROBABILITY_NEW_EVENT)
             if prob_new > (PROBABILITY_NEW_EVENT - self.timer_no_event) :

@@ -10,43 +10,44 @@ class EvenementMessage(Evenement) :
     #Create effects for event
     def start(self) :
         super().start()
-                        
-        SIZE_LETTER = 0.3 #?        
-                        
+        self.setTitle("Display")
+        
+        #create new object
         scn = gl.getCurrentScene()
         obl = scn.objects
         
+        #set position
+        SIZE_LETTER = 0.3 #? 
         if self.event :
             self.object = obl["UIeventText"]
-            self.object.localPosition = [14.52026,-6.65681,4.41221]
+            self.originalPosition = [14.52026,-6.65681,4.41221]
             self.centered = 0 
         else:
             self.object = obl["UImessage"]
-            self.object.localPosition = [13.28884,-1.53494,6.01999]
-        
+            self.originalPosition  = [13.28884,-6.65681,6.01999]
             self.centered = (len(self.message)*SIZE_LETTER) / 2
-            """
-            if self.centered > 8 :
-                self.centered = 8 
-            if len(self.message) > 15 :
-                self.centered = 4
-            """
-            print("center at " + str(self.centered ))
+            self.centered = 0
+           
+            #print("center at " + str(self.centered ))
         
-        #self.centered = 0 
-        
+        self.object.localPosition = self.originalPosition 
         self.object.applyMovement((0,-self.centered,0))
+        self.object.text = self.message
             
     #Cleaning
     def finish(self) :
         super().finish()
         self.object.text = ""   
-        self.object.applyMovement((0,self.centered,0))
+        self.object.localPosition = self.originalPosition 
         
     def run(self) :
         super().run()    
-        self.object.text = self.message
-        self.object.applyMovement((0,0,0.003)) #up movement
+        #self.object.text = self.message
+        if self.message == "Mission won!":
+            speed = 0.006
+        else :
+            speed = 0.003
+        self.object.applyMovement((0,0,speed)) #up movement
         
     def setMessageProperties(self, message, event) :
         self.message = message
@@ -188,21 +189,21 @@ class MissionVariate(DangerMission) :
         if difficulty <= 0:
             self.speed_limit = 2.5
         elif difficulty == 1 :
-            self.speed_limit = 2.3
-        else :
             self.speed_limit = 2
+        else :
+            self.speed_limit = 1.5
 
     def start(self) :
         super().start()
         self.speed_start = round(gl.currentGSR, 2)
 
-        self.setTitle("Don't change your speed!")
+        self.setTitle("Don't change\nyour speed!")
         
     def verifyCondition(self) :  
         speed_current = round(gl.currentGSR, 2)
         speed_comp = abs(self.speed_start - speed_current)
         
-        if speed_comp < self.speed_limit:
+        if speed_comp > self.speed_limit:
             return True
         else:
             return False
