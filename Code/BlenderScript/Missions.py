@@ -106,7 +106,7 @@ class EventRotatingScreen(Evenement) :
         temps = random.randint(7,18)
         self.setTimer(temps)
         
-        self.speedRotation = random.uniform(0.01,0.09)
+        self.speedRotation = random.uniform(0.005,0.08)
         self.directionRotation = random.choice([-1, 1])
         
     def run(self):
@@ -140,18 +140,18 @@ class EventNoCubeMov(Evenement) :
 class MissionSlowDown(ActionMission):
     def setDifficulty(self, difficulty) :
         if difficulty <= 0:
-            self.coef = 0.7
-        elif difficulty == 1 :
-            self.coef = 0.6
-        else :
             self.coef = 0.5
+        elif difficulty == 1 :
+            self.coef = 0.8
+        else :
+            self.coef = 1
             
     def start(self) :
         super().start()
         speed_start = round(gl.currentGSR, 2)
-        self.speed_target = speed_start*self.coef
+        self.speed_target = speed_start-self.coef
 
-        self.setTitle("Slow down to " + str(round(self.speed_target,2)) + "!")
+        self.setTitle("Slow down\nto " + str(round(self.speed_target,2)) + "!")
         
     def verifyCondition(self) :
         speed_current = round(gl.currentGSR, 2)
@@ -163,16 +163,16 @@ class MissionSlowDown(ActionMission):
 class MissionSpeedUp(ActionMission):
     def setDifficulty(self, difficulty) :
         if difficulty <= 0:
-            self.coef = 1.3
+            self.coef = 0.5
         elif difficulty == 1 :
-            self.coef = 1.5
+            self.coef = 0.8
         else :
-            self.coef = 1.6
+            self.coef = 1
 
     def start(self) :
         super().start()
         speed_start = round(gl.currentGSR, 2)
-        self.speed_target = speed_start*self.coef
+        self.speed_target = speed_start+self.coef
 
         self.setTitle("Speed up to " + str(round(self.speed_target,2)) + "!")
         

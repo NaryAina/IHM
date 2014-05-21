@@ -8,7 +8,7 @@ scn = gl.getCurrentScene()
 obl = scn.objects
 
 obl["eventWallVision"].visible = False
-obl["eventJumpScare"].visible = False
+obl["eventJumpScare"].visible = True
 
 if gl.globalDict["modeChallenge"] :
        
