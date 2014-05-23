@@ -245,9 +245,7 @@ class Challenge(object) :
         if self.timer < 0 :
             #close socket
             SocketUDPClose.main()
-            #save score
-            gl.globalDict["Score"] = self.score
-            gl.globalDict["Time"] = self.totalTime
+            
             #replace scene
             gl.getCurrentScene().replace('GameOverScene')
 

@@ -9,6 +9,7 @@ obl = scn.objects
 
 obl["eventWallVision"].visible = False
 obl["eventJumpScare"].visible = False
+obl["loadingScreen"].visible = False
 
 if gl.globalDict["modeChallenge"] :
        
