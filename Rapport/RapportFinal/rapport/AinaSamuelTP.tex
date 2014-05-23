@@ -13,7 +13,8 @@
 \usepackage[table]{xcolor} %pour les couleurs
 \usepackage{multicol}
 \usepackage[babel=true]{csquotes} %pour les citations
-
+\usepackage{hyperref}
+\usepackage{float} 
 \usepackage{adjustbox} %pour resizer les tableaux
 
 %%%% pour l'insertion de code %%%%%
@@ -77,29 +78,81 @@ The goal of this project is to build a game exploring original human-machine int
 
 We started from the premise that the GSR sensor could be used as an indicator of excitement. Psychological arousal is linked with nervous activity that changes skin conductance. However, data from the GSR sensor isn't necessarily stable and skin conductance is subject to sudden changes (spikes) that doesn't reflect a general state of being.
 
-In our game, we used a statistical analysis technique called \textbf{moving average} to smooth out the data. The advantage of the moving average is that it reduces the impact of spikes but still preserves long-term tendencies, similarly to a low-pass filter. This technique is usually used in finance and economy to represent trends over time, which is what we want with real-time acquisition of data. The disadvantage of this technique is that there is a slight delay in the 
+In our game, we used a statistical analysis technique called \textbf{moving average} to smooth out the data. The advantage of the moving average is that it reduces the impact of spikes but still preserves long-term tendencies, similarly to a low-pass filter. This technique is usually used in finance and economy to represent trends over time, which is what we want with real-time acquisition of data. More precisely, we use a weighted moving average (WMA) which gives more importance to the oldest data and prevent influence from sudden spikes. It has the following formula : 
 
-example
+\begin{equation}
+\text{WMA} = \frac{n * p_n + (n - 1) * p_{n-1} + ... + 1 * p_{1}}{n + (n-1) + ... + 1}
+\end{equation}
 
-formula
-why use
-	constant
-	no peak
-	directly translated into rotation
-	comparison with....
+Where $n$ is the number of data in a queue, $p_x$ is some GSR value at point $x$ in the queue and $p_n$ is the oldest data in the queue. Our moving average is calculated for each new received data by adding it to a queue of size $n=20$.
+
+Here is an illustration of the smoothing done by moving average\footnote{Image taken from : \\ \hyperref[]{http://support2.dundas.com/OnlineDocumentation/WinChart2003/WeightedMovingAverage.html}} :
+
+\begin{figure}[H] 
+\centering
+\includegraphics{WeightedMovingAverage.png}
+\caption{Exemple of smoothing with weighted moving average.}
+\end{figure}
+
+The disadvantage of this technique is that there is a slight delay when trends shift, because the first few points do not have enough weight to influence the average yet.
 
 \subsection{Game design}
 
-missions etc
+The game consists of a cube rotating in the middle of the screen. The cube rotates according to the player's state. Getting excited results in a fast acceleration while being calm makes the cube slow down. By controlling her ``emotions'' (or at least her excitation), the player can then control the speed of the rotation.
+
+The game has two modes of play. The first mode is 
+
+2 modes
+
+relaxation mode no objective
+way to understand how game works
+how rythme works
+relax and sooth 
+
+challenge mode,
+time limit, playing as long as possible
+win more time by completing missions
+once finished, score (calculated according to missions)
+mission types - 
+slow down, not variate, etc
+randomized mission in a shuffled list (to prevent many repetitions)
+special events to distract player - jump scare 
+
 
 \subsection{Blender}
 
+send data over socket
+
+movement camera, cube
+HUD position
+
 style
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Evaluation}
 
+image jeu 
 
+objective : control emotions linked to stress
+
+contrôle du jeu - player input
+se calmer - peu être facile... ou pas
+s'exciter en parlant
+- difficulté jeu sans direct input
+
+game plays better without player
+because point of game is to be stable
+(human hard to stay stable)
+(because excitement; because sensor - transpiration?)
+
+with experience, understand how can manipulate arousal
+talking
+closing eyes
+focus on cube - can reduce - calm
 
 \section{Conclusion}
+
+
 
 \end{document}
