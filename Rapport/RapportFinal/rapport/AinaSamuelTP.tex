@@ -101,18 +101,20 @@ The disadvantage of this technique is that there is a slight delay when trends s
 The game consists of a cube rotating in the middle of the screen. The cube rotates according to the player's state. Getting excited results in a fast acceleration while being calm makes the cube slow down. By controlling her ``emotions'' (or at least her excitation), the player can then control the speed of the rotation.
 
 %2 modes
-The game has two modes of play, Relaxation mode and Challenge mode. 
+The game has two modes of play, \texttt{Relaxation mode} and \texttt{Challenge mode}. 
 
-The Relaxation mode consist only of a rotating cube inside an environment without time limit. There is no objective in this mode. It can be used as a introduction to the game, for familiarization.
+Relaxation mode only consists of the rotating cube inside an environment without any time restriction. There is no objective in this mode. It can be used as an introduction to the game, to familiarize the player to the controls.
 
+Challenge mode is about winning as much points as possible by controlling the cube's rotation and completing missions before the end of the time allocated. Since the game is about controlling the stress of a player, two elements are used during the game : Mission where the player have to change his stress to have benefices and Event that disrupt the player.
 %Challenge mode : introduction
-The Challenge mode is about winning as much point as possible by controlling the cube rotation during missions during a time limit. Since the game is about controlling the stress of a player, two elements are used during the game : Mission where the player have to change his stress to have benefices and Event that disrupt the player.
 
 %Challenge mode : Mission
-In the Challenge mode, the missions are based on controlling the speed of the cube, such as not exceed a given speed value. Completing a mission grants the player points for her score, and extends the time before the game is over. Failing a mission won't have any effect, beside the time lost during the mission. Up to two missions can appears at the same time. After the time limit is elapsed, the game is over. The mission are randomized  to prevent prediction.
+In Challenge mode, missions are based on controlling the cube's rotation speed (with goals like not exceeding a given speed value). Completing a mission grants the player points for her score, and extends the time before the game is over. Failing a mission won't have any effect, besides the time lost during the mission. Up to two missions can appears at the same time. After the time limit is elapsed, the game is over. The missions are randomized  by shuffling a list of possible missions to prevent repetition.
+
+[IMAGE DU JEU ICI?]
 
 %Challenge mode : Event
-While playing the Challenge mode some events occur. The interface or the cube's environment are modified in order to destabilize the player, which can make some missions harder. For example the cube can suddenly stop moving, although that the stress of the player still affects the results of the missions. The events occur randomly and may not happen at all during a game.
+While playing Challenge mode some special events may occur. The interface or the cube's environment is modified in order to destabilize the player, which can make some missions harder. For example the cube can suddenly stop moving, although the stress of the player still affects the results of the missions. These events occur randomly with a low probability and may not happen at all during a game.
 
 %way to understand how game works
 %how rythme works
@@ -131,12 +133,15 @@ While playing the Challenge mode some events occur. The interface or the cube's 
 \subsection{Blender}
 
 %send data over socket
-At the start of the game Sockets are used between blender and the GSR device to establish a connection. We use the UDP protocol since the data from the GSR to the game is numerous. Unlike the TCP/IP protocol there is no problem if some data is lost and no synchronizations are required. The only data sent by the game to blender is a starting and stopping order to receive data.
+At the start of the game, we instantiate sockets between blender and the GSR device to establish a connection. We use the UDP protocol since the data from the GSR to the game is numerous. Unlike the TCP/IP protocol there is no problem if some data is lost and no synchronization is required. Blender only sends a starting and stopping order to the game (at the start and end respectively) to receive data.
 
 %movement camera, 
 
 %cube
-The cube is a mesh cube that has a modifier applied to it. It consists of a sphere "expended" to the border of the cube, to every direction so that the corner and the edges are smoother.
+In Blender, the cube is a mesh cube that has a modifier applied to it. It consists of a sphere "expended" to the border of the cube, to every direction so that the corner and the edges are smoother.
+
+Image du cube sans modifier > image du cube avec modifier?
+
 
 HUD position
 
@@ -146,7 +151,8 @@ style
 
 \section{Evaluation}
 
-image jeu 
+image jeu?
+image nous qui jouons? :D 
 
 objective : control emotions linked to stress
 
